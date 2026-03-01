@@ -16,6 +16,17 @@ class AuthService
         return $user->createToken('auth_token', ['*'], $expiresAt)->plainTextToken;
     }
 
+    private function revokeToken($user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
+
+    public function refreshToken($user): string
+    {
+        $this->revokeToken($user);
+        return $this->issueToken($user);
+    }
+
     public function register($userData): array
     {
         return DB::transaction(function () use ($userData) {
@@ -44,7 +55,7 @@ class AuthService
 
     public function logout($user): void
     {
-        $user->currentAccessToken()->delete();
+        $this->revokeToken($user);
     }
 
     public function logoutAll($user): void
