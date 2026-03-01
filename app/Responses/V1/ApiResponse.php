@@ -24,13 +24,27 @@ class ApiResponse
         ], $code);
     }
 
-    public function ok($message, $data = null): JsonResponse
+    // Success
+
+    public static function ok($message, $data = null): JsonResponse
     {
         return self::success($message, $data);
     }
 
-    public function created($message = 'Resource created successfully', $data = null): JsonResponse
+    public static function created($message = 'Resource created successfully', $data = null): JsonResponse
     {
         return self::success($message, $data, 201);
+    }
+
+    // Errors
+
+    public static function validationError($message = 'Validation error', $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 422);
+    }
+
+    public static function serverError($message = 'Something went wrong. Please try again.', $errors = null): JsonResponse
+    {
+        return self::error($message, $errors);
     }
 }
