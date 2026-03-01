@@ -7,11 +7,16 @@ use App\Http\Requests\V1\Auth\RegisterUserRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
 use App\Responses\V1\ApiResponse;
+use App\Services\V1\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function __construct(private AuthService $authService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -25,21 +30,12 @@ class AuthController extends Controller
      */
     public function register(RegisterUserRequest $request)
     {
-        $user = User::create([
-            ...$request->validated(),
-            'password' => Hash::make($request->validated('password')),
-        ]);
-
-        $token = $user->createToken(
-            'auth_token',
-            expiresAt: now()->addDays(30),
-        )->plainTextToken;
-
+        $result = $this->authService->register($request->validated());
         return ApiResponse::created(
             'User created successfully',
             [
-                'user' => new UserResource($user),
-                'token' => $token,
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
             ]
         );
     }
