@@ -47,4 +47,9 @@ class ApiResponse
     {
         return self::error($message, $errors);
     }
+
+    public static function invalidCredentials(): JsonResponse
+    {
+        return self::error('Invalid email address or password.', null, 401);
+    }
 }
