@@ -52,4 +52,10 @@ class AuthController extends Controller
         $this->authService->logoutAll($request->user());
         return ApiResponse::noContent('All user logged out successfully');
     }
+
+    public function refreshToken(Request $request)
+    {
+        $token = $this->authService->refreshToken($request->user());
+        return ApiResponse::ok('Token refreshed successfully', ['token' => $token]);
+    }
 }
