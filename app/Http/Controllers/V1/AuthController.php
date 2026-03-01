@@ -8,6 +8,7 @@ use App\Http\Requests\V1\LoginAuthRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Responses\V1\ApiResponse;
 use App\Services\V1\AuthService;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -38,5 +39,17 @@ class AuthController extends Controller
                 'token' => $result['token'],
             ]
         );
+    }
+
+    public function logout(Request $request)
+    {
+        $this->authService->logout($request->user());
+        return ApiResponse::noContent('User logged out successfully');
+    }
+
+    public function logoutAll(Request $request)
+    {
+        $this->authService->logoutAll($request->user());
+        return ApiResponse::noContent('All user logged out successfully');
     }
 }
