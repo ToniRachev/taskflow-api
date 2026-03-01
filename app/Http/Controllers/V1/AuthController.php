@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\RegisterUserRequest;
 use App\Http\Requests\V1\LoginAuthRequest;
 use App\Http\Resources\V1\UserResource;
-use App\Models\User;
 use App\Responses\V1\ApiResponse;
 use App\Services\V1\AuthService;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
