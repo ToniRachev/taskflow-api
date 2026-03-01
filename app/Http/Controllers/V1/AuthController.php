@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\RegisterUserRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
+use App\Responses\V1\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -34,10 +35,13 @@ class AuthController extends Controller
             expiresAt: now()->addDays(30),
         )->plainTextToken;
 
-        return response()->json([
-            'data' => new UserResource($user),
-            'token' => $token,
-        ]);
+        return ApiResponse::created(
+            'User created successfully',
+            [
+                'user' => new UserResource($user),
+                'token' => $token,
+            ]
+        );
     }
 
     /**
