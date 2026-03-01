@@ -3,9 +3,7 @@
 namespace App\Services\V1;
 
 use App\Exceptions\V1\InvalidCredentialsException;
-use App\Http\Resources\V1\UserResource;
 use App\Models\User;
-use App\Responses\V1\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
