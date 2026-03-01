@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 class AuthService
 {
 
-    // Token handlers
     private function issueToken($user): string
     {
         $expiresAt = now()->addDays(30);
@@ -26,5 +25,15 @@ class AuthService
 
         $token = $this->issueToken($user);
         return compact('user', 'token');
+    }
+
+    public function logout($user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
+
+    public function logoutAll($user): void
+    {
+        $user->tokens()->delete();
     }
 }
