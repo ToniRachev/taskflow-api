@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Auth\RegisterUserRequest;
 use App\Http\Requests\V1\LoginAuthRequest;
 use App\Http\Resources\V1\UserResource;
-use App\Models\User;
 use App\Responses\V1\ApiResponse;
 use App\Services\V1\AuthService;
 use Illuminate\Http\Request;
@@ -17,17 +16,6 @@ class AuthController extends Controller
     {
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function register(RegisterUserRequest $request)
     {
         $result = $this->authService->register($request->validated());
@@ -53,27 +41,15 @@ class AuthController extends Controller
         );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function logout(Request $request)
     {
-        //
+        $this->authService->logout($request->user());
+        return ApiResponse::noContent('User logged out successfully');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
+    public function logoutAll(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        $this->authService->logoutAll($request->user());
+        return ApiResponse::noContent('All user logged out successfully');
     }
 }

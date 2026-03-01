@@ -36,6 +36,11 @@ class ApiResponse
         return self::success($message, $data, 201);
     }
 
+    public static function noContent($message = 'No content'): JsonResponse
+    {
+        return self::success($message, null, 204);
+    }
+
     // Errors
 
     public static function validationError($message = 'Validation error', $errors = null): JsonResponse
@@ -51,5 +56,10 @@ class ApiResponse
     public static function invalidCredentials(): JsonResponse
     {
         return self::error('Invalid email address or password.', null, 401);
+    }
+
+    public static function unauthenticated(): JsonResponse
+    {
+        return self::error('Unauthenticated.', null, 401);
     }
 }
