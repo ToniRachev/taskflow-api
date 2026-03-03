@@ -2,6 +2,7 @@
 
 namespace App\Http\Responses\V1;
 
+use App\Constants\Message;
 use Illuminate\Http\JsonResponse;
 
 class ApiResponse
@@ -24,8 +25,23 @@ class ApiResponse
         ], $code);
     }
 
-    public static function created($message = 'Resource created successfully', $data = null): JsonResponse
+
+    //---Success-----------------------
+
+    public static function created($message = Message::RESOURCE_CREATED, $data = null): JsonResponse
     {
         return self::success($message, $data, 201);
+    }
+
+    //---Errors-----------------------
+
+    public static function validationError($message = Message::VALIDATION_ERROR, $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 422);
+    }
+
+    public static function serverError($message = Message::SERVER_ERROR, $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 500);
     }
 }
