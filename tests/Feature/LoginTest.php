@@ -34,8 +34,12 @@ describe('Login', function () {
             ->assertStatus(401);
     })
         ->with([
-            'invalid email' => ['email' => 'veryWrongEmail1234@gmail.com'],
-            'invalid password' => ['password' => 'veryWrongPassword123$'],
+            'invalid email' => [
+                ['email' => 'veryWrongEmail1234@gmail.com']
+            ],
+            'invalid password' => [
+                ['password' => 'veryWrongPassword123$']
+            ],
         ]);
 
     it('should fail for missing fields', function ($invalidData, $field) {
@@ -45,7 +49,7 @@ describe('Login', function () {
             ->assertJsonValidationErrors([$field]);
     })
         ->with([
-            'invalid email' => ['email' => null],
-            'invalid password' => ['password' => null],
+            'invalid email' => [['email' => null], 'email'],
+            'invalid password' => [['password' => null], 'password'],
         ]);
 });
