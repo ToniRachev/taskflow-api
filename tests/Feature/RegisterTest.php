@@ -14,7 +14,7 @@ describe('Register', function () {
             'password' => 'testPassword123$',
         ];
 
-        $this->registerRoute = route('api.v1.auth.' . Routes::REGISTER);
+        $this->registerRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::REGISTER);
     });
 
     it('should register a user and returns the correct structure', function () {

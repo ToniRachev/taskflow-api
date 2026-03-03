@@ -3,6 +3,6 @@
 use App\Constants\Routes;
 use App\Http\Controllers\V1\AuthController;
 
-Route::prefix('auth')->name('auth.')->group(function () {
+Route::prefix(Routes::AUTH_MODULE)->name(Routes::AUTH_MODULE . '.')->group(function () {
     Route::post(Routes::REGISTER, [AuthController::class, 'register'])->name(Routes::REGISTER);
 });
