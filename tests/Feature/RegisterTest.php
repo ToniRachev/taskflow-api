@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Routes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -12,10 +13,12 @@ describe('Register', function () {
             'email' => 'test@gmail.com',
             'password' => 'testPassword123$',
         ];
+
+        $this->registerRoute = route('api.v1.auth.' . Routes::REGISTER);
     });
 
     it('should register a user and returns the correct structure', function () {
-        $response = $this->postJson('/api/v1/auth/register', $this->payload)
+        $response = $this->postJson($this->registerRoute, $this->payload)
             ->assertStatus(201)
             ->assertJsonStructure([
                 'success',
@@ -32,13 +35,13 @@ describe('Register', function () {
             'email' => 'test@gmail.com'
         ]);
 
-        $this->postJson('/api/v1/auth/register', $this->payload)
+        $this->postJson($this->registerRoute, $this->payload)
             ->assertStatus(422)
             ->assertJsonValidationErrors(['email']);
     });
 
     it('fails validation on missing data', function ($invalidData, $field) {
-        $this->postJson('/api/v1/auth/register', array_merge($this->payload, $invalidData))
+        $this->postJson($this->registerRoute, array_merge($this->payload, $invalidData))
             ->assertStatus(422)
             ->assertJsonValidationErrors([$field]);
     })->with([
@@ -48,7 +51,7 @@ describe('Register', function () {
     ]);
 
     it('fail validation on incorrect data', function ($invalidData, $field) {
-        $this->postJson('/api/v1/auth/register', array_merge($this->payload, $invalidData))
+        $this->postJson($this->registerRoute, array_merge($this->payload, $invalidData))
             ->assertStatus(422)
             ->assertJsonValidationErrors([$field]);
     })->with([
@@ -58,7 +61,7 @@ describe('Register', function () {
     ]);
 
     it('hash password', function () {
-        $response = $this->postJson('/api/v1/auth/register', $this->payload);
+        $response = $this->postJson($this->registerRoute, $this->payload);
 
         $user = \App\Models\User::where('email', $this->payload['email'])->first();
         $this->assertNotEquals($this->payload['password'], $user->password);
