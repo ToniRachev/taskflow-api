@@ -11,7 +11,7 @@ describe('Register', function () {
         $this->payload = [
             'name' => 'Test',
             'email' => 'test@gmail.com',
-            'password' => 'testPassword123$',
+            'password' => 'X9#mK2$pQwLz!nR4',
         ];
 
         $this->registerRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::REGISTER);
