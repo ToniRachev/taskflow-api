@@ -28,6 +28,11 @@ class ApiResponse
 
     //---Success-----------------------
 
+    public static function ok($message = 'Ok', $data = null): JsonResponse
+    {
+        return self::success($message, $data);
+    }
+
     public static function created($message = Message::RESOURCE_CREATED, $data = null): JsonResponse
     {
         return self::success($message, $data, 201);
@@ -43,5 +48,10 @@ class ApiResponse
     public static function serverError($message = Message::SERVER_ERROR, $errors = null): JsonResponse
     {
         return self::error($message, $errors, 500);
+    }
+
+    public static function invalidCredentials(): JsonResponse
+    {
+        return self::error(Message::INVALID_CREDENTIALS, null, 401);
     }
 }

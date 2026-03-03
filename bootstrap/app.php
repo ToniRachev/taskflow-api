@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\InvalidCredentialsException;
 use App\Http\Responses\V1\ApiResponse;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
@@ -26,11 +27,18 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::validationError(errors: $e->errors());
         });
 
+        $exceptions->render(function (InvalidCredentialsException $e) {
+            return ApiResponse::invalidCredentials();
+        });
+
+
         $exceptions->render(function (QueryException $e) {
+            Log::error($e->getMessage());
             return ApiResponse::serverError();
         });
 
         $exceptions->render(function (Throwable $e) {
+            Log::error($e->getMessage());
             return ApiResponse::serverError();
         });
     })->create();

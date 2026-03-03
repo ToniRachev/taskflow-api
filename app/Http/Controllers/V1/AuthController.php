@@ -4,7 +4,9 @@ namespace App\Http\Controllers\V1;
 
 use App\Constants\Message;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Auth\LoginAuthRequest;
 use App\Http\Requests\V1\Auth\RegisterAuthRequest;
+use App\Http\Resources\V1\UserResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Services\V1\AuthService;
 
@@ -22,6 +24,19 @@ class AuthController extends Controller
             [
                 'user' => $response['user'],
                 'token' => $response['token'],
+            ]
+        );
+    }
+
+    public function login(LoginAuthRequest $request)
+    {
+        $result = $this->authService->login($request->validated());
+
+        return ApiResponse::ok(
+            Message::USER_LOGIN,
+            [
+                'user' => new UserResource($result['user']),
+                'token' => $result['token'],
             ]
         );
     }
