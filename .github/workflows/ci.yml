@@ -1,31 +1,47 @@
-name: Run Tests
+name: App tests
 
-on: [ pull_request ]
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
   test:
+    name: Laravel 12 - Pest Tests
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Match your local Laravel 12 version
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          php-version: "8.2"
+          extensions: mbstring, bcmath, pdo, pdo_sqlite, xml, curl, zip
           coverage: none
 
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
 
-      - name: Prepare Environment
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy .env
+        run: cp .env.example .env.testing
+
+      - name: Set application key
+        run: php artisan key:generate --env=testing
+
+      - name: Configure test database
         run: |
-          cp .env.example .env
-          php artisan key:generate
+          echo "DB_CONNECTION=sqlite" >> .env.testing
+          echo "DB_DATABASE=:memory:" >> .env.testing
 
-      - name: Run Pest Tests
-        run: ./vendor/bin/pest
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+      - name: Run Pest tests
+        run: php artisan test --env=testing --parallel
