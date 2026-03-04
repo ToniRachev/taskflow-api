@@ -25,4 +25,21 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public static function defaultPreferences(): array
+    {
+        return [
+            'preferences' => [
+                'theme' => 'system',
+                'language' => 'en',
+                'notifications' => [
+                    'email' => true,
+                    'in_app' => true,
+                    'task_assigned' => true,
+                    'mentioned' => true,
+                    'due_soon' => true
+                ]
+            ]
+        ];
+    }
 }
