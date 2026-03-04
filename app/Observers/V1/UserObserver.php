@@ -2,6 +2,7 @@
 
 namespace App\Observers\V1;
 
+use App\Models\V1\Profile;
 use App\Models\V1\User;
 
 class UserObserver
@@ -11,7 +12,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $user->profile()->create();
+        $user->profile()->create(Profile::defaultPreferences());
     }
 
     /**
