@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('phone', 20)->nullable();
             $table->string('github_url', 255)->nullable();
             $table->json('preferences')->nullable();
+            $table->string('avatar_url', 255)->nullable();
             $table->timestamps();
         });
     }
