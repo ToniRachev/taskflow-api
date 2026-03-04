@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\InvalidCredentialsException;
+use App\Http\Middleware\UpdateLastSeenMiddleware;
 use App\Http\Responses\V1\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
@@ -21,7 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->appendToGroup('api', [
+            UpdateLastSeenMiddleware::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $e) {
