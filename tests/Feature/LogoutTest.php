@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->user = \App\Models\User::factory()->create();
+    $this->user = \App\Models\V1\User::factory()->create();
     $this->token = $this->user->createToken('auth_token')->plainTextToken;
     $this->logoutRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::LOGOUT);
     $this->logoutAllRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::LOGOUT_ALL);

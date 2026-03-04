@@ -12,7 +12,7 @@ describe('Login', function () {
             'password' => 'X9#mK2$pQwLz!nR4',
         ];
 
-        $this->user = \App\Models\User::factory()->create($this->payload);
+        $this->user = \App\Models\V1\User::factory()->create($this->payload);
         $this->loginRoute = route('api.v1.auth.login');
     });
 

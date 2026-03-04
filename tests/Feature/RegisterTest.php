@@ -31,7 +31,7 @@ describe('Register', function () {
     });
 
     it('fail if the email is already registered', function () {
-        \App\Models\User::factory()->create([
+        \App\Models\V1\User::factory()->create([
             'email' => 'test@gmail.com'
         ]);
 
@@ -63,7 +63,7 @@ describe('Register', function () {
     it('hash password', function () {
         $response = $this->postJson($this->registerRoute, $this->payload);
 
-        $user = \App\Models\User::where('email', $this->payload['email'])->first();
+        $user = \App\Models\V1\User::where('email', $this->payload['email'])->first();
         $this->assertNotEquals($this->payload['password'], $user->password);
     });
 });
