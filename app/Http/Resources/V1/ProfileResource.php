@@ -9,7 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin Profile
  */
-
 class ProfileResource extends JsonResource
 {
     /**
@@ -23,7 +22,17 @@ class ProfileResource extends JsonResource
             'bio' => $this->bio,
             'phone' => $this->phone,
             'github_url' => $this->github_url,
-            'preferences' => $this->preferences,
+            'preferences' => [
+                'theme' => $this->preferences['theme'],
+                'language' => $this->preferences['language'],
+                'notifications' => [
+                    'email' => $this->preferences['notifications']['email'],
+                    'mentioned' => $this->preferences['notifications']['mentioned'],
+                    'inApp' => $this->preferences['notifications']['in_app'],
+                    'taskAssigned' => $this->preferences['notifications']['task_assigned'],
+                    'dueSoon' => $this->preferences['notifications']['due_soon'],
+                ]
+            ]
         ];
     }
 }
