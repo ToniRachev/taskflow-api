@@ -12,7 +12,7 @@ final class AuthService
 {
     private function invokeToken(User $user): string
     {
-        return $user->createToken('auth_token')->plainTextToken;
+        return $user->createToken('auth_token' . now()->getPreciseTimestamp(3))->plainTextToken;
     }
 
     private function revokeToken(User $user): void
@@ -42,5 +42,23 @@ final class AuthService
 
         $token = $this->invokeToken($user);
         return compact('user', 'token');
+    }
+
+    public function logout(User $user): void
+    {
+        $this->revokeToken($user);
+    }
+
+    public function logoutAll(User $user): void
+    {
+        $user->tokens()->delete();
+    }
+
+    public function refreshToken(User $user): string
+    {
+        return DB::transaction(function () use ($user) {
+            $this->revokeToken($user);
+            return $this->invokeToken($user);
+        });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 
 class ApiResponse
 {
-    private static function success($message, $data, $code = 200): JsonResponse
+    private static function success($message = null, $data = null, $code = 200): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -38,6 +38,11 @@ class ApiResponse
         return self::success($message, $data, 201);
     }
 
+    public static function noContent(): JsonResponse
+    {
+        return self::success(code: 204);
+    }
+
     //---Errors-----------------------
 
     public static function validationError($message = Message::VALIDATION_ERROR, $errors = null): JsonResponse
@@ -53,5 +58,10 @@ class ApiResponse
     public static function invalidCredentials(): JsonResponse
     {
         return self::error(Message::INVALID_CREDENTIALS, null, 401);
+    }
+
+    public static function unauthorized(): JsonResponse
+    {
+        return self::error(Message::UNAUTHORIZED, null, 401);
     }
 }
