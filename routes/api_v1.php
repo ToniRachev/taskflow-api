@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get(Routes::GET_PROFILE, [ProfileController::class, 'show'])->name(Routes::GET_PROFILE);
     Route::patch(Routes::PROFILE, [ProfileController::class, 'update'])->name(Routes::PROFILE);
     Route::patch(Routes::PROFILE . '/' . Routes::PREFERENCES, [ProfileController::class, 'updatePreferences']);
+    ROUTE::post(Routes::PROFILE . '/' . Routes::AVATAR, [ProfileController::class, 'updateAvatar'])->name(Routes::AVATAR);
+    ROUTE::delete(Routes::PROFILE . '/' . Routes::AVATAR, [ProfileController::class, 'deleteAvatar'])->name(Routes::AVATAR);
 });
