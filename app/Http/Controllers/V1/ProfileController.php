@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Profile\UpdateAvatarRequest;
 use App\Http\Requests\V1\Profile\UpdatePreferencesRequest;
 use App\Http\Requests\V1\Profile\UpdateProfileRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Responses\V1\ApiResponse;
-use App\Models\V1\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -35,5 +36,33 @@ class ProfileController extends Controller
             'preferences' => array_replace_recursive($user->profile->preferences, $request->validated())
         ]);
         return ApiResponse::ok(data: new UserResource($user));
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request)
+    {
+        $user = $request->user()->load('profile');
+        $file = $request->file('avatar');
+
+
+        $path = $file->store('avatars', 'public');
+        $user->profile->forceFill(['avatar_url' => $path])->save();
+
+        if ($user->profile->avatar_url) {
+            Storage::disk('public')->delete($user->profile->avatar_url);
+        }
+
+        return ApiResponse::ok(data: new UserResource($user));
+    }
+
+    public function deleteAvatar(Request $request)
+    {
+        $user = $request->user()->load('profile');
+
+        if ($user->profile->avatar_url) {
+            Storage::disk('public')->delete($user->profile->avatar_url);
+            $user->profile->forceFill(['avatar_url' => null])->save();
+        }
+
+        return ApiResponse::noContent();
     }
 }
