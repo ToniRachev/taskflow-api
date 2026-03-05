@@ -10,8 +10,6 @@ class Profile extends Model
     protected $fillable = [
         'bio',
         'phone',
-        'github_url',
-        'preferences',
     ];
 
     protected function casts(): array
