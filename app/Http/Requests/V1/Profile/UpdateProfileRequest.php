@@ -23,8 +23,16 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'bio' => ['nullable', 'string', 'max:500'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'github_url' => ['nullable', 'url'],
+            'phone' => ['nullable', 'string', 'regex:/^\+?[1-9]\d{6,14}$/'],
+            'github_url' => ['nullable', 'url', 'regex:/^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9\-]+\/?$/'],
+        ];
+    }
+
+    public function message(): array
+    {
+        return [
+            'phone.regex' => 'The phone number must be a valid phone number.',
+            'github_url.regex' => 'The GitHub URL must be a valid URL.',
         ];
     }
 }
