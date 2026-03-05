@@ -14,7 +14,7 @@ describe('Register', function () {
             'password' => 'X9#mK2$pQwLz!nR4',
         ];
 
-        $this->registerRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::REGISTER);
+        $this->registerRoute = route(Routes::REGISTER);
     });
 
     it('should register a user and returns the correct structure', function () {
@@ -31,7 +31,7 @@ describe('Register', function () {
     });
 
     it('fail if the email is already registered', function () {
-        \App\Models\User::factory()->create([
+        \App\Models\V1\User::factory()->create([
             'email' => 'test@gmail.com'
         ]);
 
@@ -63,7 +63,7 @@ describe('Register', function () {
     it('hash password', function () {
         $response = $this->postJson($this->registerRoute, $this->payload);
 
-        $user = \App\Models\User::where('email', $this->payload['email'])->first();
+        $user = \App\Models\V1\User::where('email', $this->payload['email'])->first();
         $this->assertNotEquals($this->payload['password'], $user->password);
     });
 });

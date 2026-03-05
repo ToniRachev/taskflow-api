@@ -4,11 +4,19 @@ namespace App\Constants;
 
 class Routes
 {
-    public const string API_VERSION = 'api.v1';
-    public const string AUTH_MODULE = 'auth';
-    public const string LOGIN = 'login';
-    public const string REGISTER = 'register';
-    public const string LOGOUT = 'logout';
-    public const string LOGOUT_ALL = 'logout-all';
-    public const string REFRESH_TOKEN = 'refresh-token';
+
+    //---Auth----------------
+    public const LOGIN = 'auth.login';
+    public const REGISTER = 'auth.register';
+    public const LOGOUT = 'auth.logout';
+    public const LOGOUT_ALL = 'auth.logout-all';
+    public const REFRESH_TOKEN = 'auth.refresh-token';
+
+    //---Profile----------------
+
+    public const GET_PROFILE = 'profile';
+    public const UPDATE_PROFILE = 'profile';
+    public const PREFERENCES = 'profile.preferences';
+    public const STORE_AVATAR = 'profile.avatar';
+    public const DESTROY_AVATAR = 'profile.avatar';
 }

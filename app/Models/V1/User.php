@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\V1;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\V1\UserStatus;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\V1\UserFactory> */
     use HasApiTokens, HasUuid, HasFactory, Notifiable;
 
     /**
@@ -57,5 +58,10 @@ class User extends Authenticatable
             $model->status = UserStatus::ACTIVE->value;
             $model->last_seen_at = now();
         });
+    }
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class);
     }
 }
