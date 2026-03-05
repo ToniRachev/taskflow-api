@@ -21,7 +21,8 @@ class ProfileResource extends JsonResource
         return [
             'bio' => $this->bio,
             'phone' => $this->phone,
-            'github_url' => $this->github_url,
+            'githubUrl' => $this->github_url,
+            'avatarUrl' => $this->avatar_url ? asset('storage/' . $this->avatar_url) : null,
             'preferences' => [
                 'theme' => $this->preferences['theme'],
                 'language' => $this->preferences['language'],
