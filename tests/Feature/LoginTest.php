@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Routes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -13,7 +14,7 @@ describe('Login', function () {
         ];
 
         $this->user = \App\Models\V1\User::factory()->create($this->payload);
-        $this->loginRoute = route('api.v1.auth.login');
+        $this->loginRoute = route(Routes::LOGIN);
     });
 
     it('should login successfully and return the correct structure', function () {

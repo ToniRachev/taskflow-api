@@ -8,9 +8,9 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->user = \App\Models\V1\User::factory()->create();
     $this->token = $this->user->createToken('auth_token')->plainTextToken;
-    $this->logoutRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::LOGOUT);
-    $this->logoutAllRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::LOGOUT_ALL);
-    $this->refreshTokenRoute = route(Routes::API_VERSION . '.' . Routes::AUTH_MODULE . '.' . Routes::REFRESH_TOKEN);
+    $this->logoutRoute = route(Routes::LOGOUT);
+    $this->logoutAllRoute = route(Routes::LOGOUT_ALL);
+    $this->refreshTokenRoute = route(Routes::REFRESH_TOKEN);
 });
 
 describe('logout', function () {
