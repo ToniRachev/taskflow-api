@@ -3,8 +3,8 @@
 namespace App\Http\Requests\V1\Profile;
 
 use App\Enums\V1\ThemePreferenceEnum;
+use App\Helpers\ArrayHelper;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
 
 class UpdatePreferencesRequest extends FormRequest
@@ -19,20 +19,7 @@ class UpdatePreferencesRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
-        $this->merge($this->snakeKeys($this->all()));
-    }
-
-    private function snakeKeys(array $array): array
-    {
-        $result = [];
-
-        foreach ($array as $key => $value) {
-            $result[Str::snake($key)] = is_array($value)
-                ? $this->snakeKeys($value)
-                : $value;
-        }
-
-        return $result;
+        $this->merge(ArrayHelper::toSnakeKeys($this->all()));
     }
 
     /**
