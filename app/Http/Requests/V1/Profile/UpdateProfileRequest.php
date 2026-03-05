@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\V1\Profile;
 
+use App\Helpers\ArrayHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProfileRequest extends FormRequest
@@ -14,6 +15,11 @@ class UpdateProfileRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(): void
+    {
+        $this->merge(ArrayHelper::toSnakeKeys($this->all()));
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,11 +30,11 @@ class UpdateProfileRequest extends FormRequest
         return [
             'bio' => ['nullable', 'string', 'max:500'],
             'phone' => ['nullable', 'string', 'regex:/^\+?[1-9]\d{6,14}$/'],
-            'github_url' => ['nullable', 'url', 'regex:/^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9\-]+\/?$/'],
+            'github_url' => ['nullable', 'regex:/^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9\-]+\/?$/'],
         ];
     }
 
-    public function message(): array
+    public function messages(): array
     {
         return [
             'phone.regex' => 'The phone number must be a valid phone number.',
