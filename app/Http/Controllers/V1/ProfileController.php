@@ -40,16 +40,15 @@ class ProfileController extends Controller
 
     public function updateAvatar(UpdateAvatarRequest $request)
     {
+        $file = $request->validated('avatar');
         $user = $request->user()->load('profile');
-        $file = $request->file('avatar');
-
-
-        $path = $file->store('avatars', 'public');
-        $user->profile->forceFill(['avatar_url' => $path])->save();
 
         if ($user->profile->avatar_url) {
             Storage::disk('public')->delete($user->profile->avatar_url);
         }
+
+        $path = $file->store('avatars', 'public');
+        $user->profile->forceFill(['avatar_url' => $path])->save();
 
         return ApiResponse::ok(data: new UserResource($user));
     }
