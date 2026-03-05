@@ -32,9 +32,9 @@ class ProfileController extends Controller
     public function updatePreferences(UpdatePreferencesRequest $request)
     {
         $user = $request->user()->load('profile');
-        $user->profile->update([
+        $user->profile->forceFill([
             'preferences' => array_replace_recursive($user->profile->preferences, $request->validated())
-        ]);
+        ])->save();
         return ApiResponse::ok(data: new UserResource($user));
     }
 
