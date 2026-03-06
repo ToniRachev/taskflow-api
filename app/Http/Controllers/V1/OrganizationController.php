@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Constants\Message;
 use App\Enums\OrganizationMembershipRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Organization\StoreOrganizationRequest;
@@ -9,8 +10,7 @@ use App\Http\Resources\V1\MemberResource;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
-use App\Models\V1\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -26,15 +26,15 @@ class OrganizationController extends Controller
         return $slug;
     }
 
-    public function store(StoreOrganizationRequest $request)
+    public function store(StoreOrganizationRequest $request): JsonResponse
     {
-        return DB::transaction(function () use ($request) {
+        $organization = DB::transaction(function () use ($request) {
             $organization = Organization::create([
-                'name' => $request->name,
-                'slug' => $this->generateUniqueSlug($request->name),
+                'name' => $request->validated('name'),
+                'slug' => $this->generateUniqueSlug($request->validated('name')),
             ]);
 
-            if ($request->file()) {
+            if ($request->hasFile('logo')) {
                 $path = $request->validated('logo')->store('organizations/logos', 'public');
                 $organization->forceFill(['logo_url' => $path])->save();
             }
@@ -44,8 +44,10 @@ class OrganizationController extends Controller
                 'joined_at' => now(),
             ]);
 
-            return new OrganizationResource($organization);
+            return $organization;
         });
+
+        return ApiResponse::created(Message::ORGANIZATION_CREATED, new OrganizationResource($organization));
     }
 
     public function index(Organization $organization)
