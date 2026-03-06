@@ -64,4 +64,9 @@ class ApiResponse
     {
         return self::error(Message::UNAUTHORIZED, null, 401);
     }
+
+    public static function notFound($message = Message::RESOURCE_NOT_FOUND, $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 404);
+    }
 }
