@@ -2,6 +2,7 @@
 
 use App\Constants\Routes;
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\OrganizationController;
 use App\Http\Controllers\V1\ProfileController;
 
 Route::prefix('auth')->group(function () {
@@ -18,7 +19,11 @@ Route::prefix('auth')->group(function () {
 Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [ProfileController::class, 'show'])->name(Routes::GET_PROFILE);
     Route::patch('/', [ProfileController::class, 'update'])->name(Routes::UPDATE_PROFILE);
-    Route::patch('preferences', [ProfileController::class, 'updatePreferences'])->name(Routes::PREFERENCES);
+    Route::patch('preferences', [ProfileController::class, 'updatePreferences'])->name(Routes::UPDATE_PREFERENCES);
     ROUTE::post('avatar', [ProfileController::class, 'updateAvatar'])->name(Routes::STORE_AVATAR);
     ROUTE::delete('avatar', [ProfileController::class, 'deleteAvatar'])->name(Routes::DESTROY_AVATAR);
+});
+
+Route::prefix('organizations')->middleware('auth:sanctum')->group(function () {
+    Route::post('/', [OrganizationController::class, 'store'])->name(Routes::STORE_ORGANIZATION);
 });
