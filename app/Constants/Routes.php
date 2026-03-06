@@ -14,9 +14,22 @@ class Routes
 
     //---Profile----------------
 
-    public const GET_PROFILE = 'profile';
-    public const UPDATE_PROFILE = 'profile';
-    public const PREFERENCES = 'profile.preferences';
-    public const STORE_AVATAR = 'profile.avatar';
-    public const DESTROY_AVATAR = 'profile.avatar';
+    public const GET_PROFILE = 'profile.show';
+    public const UPDATE_PROFILE = 'profile.update';
+    public const UPDATE_PREFERENCES = 'profile.preferences.update';
+    public const STORE_AVATAR = 'profile.avatar.store';
+    public const DESTROY_AVATAR = 'profile.avatar.destroy';
+
+    //---Organization----------------
+
+    public const STORE_ORGANIZATION = 'organizations.store';
+    public const GET_USER_ORGANIZATIONS = 'organizations.index';
+    public const GET_ORGANIZATION_DETAILS = 'organizations.show';
+    public const UPDATE_ORGANIZATION = 'organizations.update';
+    public const DESTROY_ORGANIZATION = 'organizations.destroy';
+    public const GET_ORGANIZATION_MEMBERS = 'organizations.members.index';
+    public const UPDATE_ORGANIZATION_MEMBER_ROLE = 'organizations.members.update';
+    public const DESTROY_ORGANIZATION_MEMBER = 'organizations.members.destroy';
+    public const LEAVE_ORGANIZATION = 'organizations.leave';
+    public const TRANSFER_ORGANIZATION_OWNERSHIP = 'organizations.transfer-ownership';
 }
