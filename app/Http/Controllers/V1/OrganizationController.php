@@ -10,43 +10,26 @@ use App\Http\Resources\V1\MemberResource;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
+use App\Services\V1\OrganizationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class OrganizationController extends Controller
 {
-    private function generateUniqueSlug($name): string
+    public function __construct(private readonly OrganizationService $organizationService)
     {
-        $slug = Str::slug($name);
-        if (Organization::where('slug', $slug)->exists()) {
-            return $this->generateUniqueSlug($name . '-' . Str::random(6));
-        }
-
-        return $slug;
     }
+
 
     public function store(StoreOrganizationRequest $request): JsonResponse
     {
-        $organization = DB::transaction(function () use ($request) {
-            $organization = Organization::create([
-                'name' => $request->validated('name'),
-                'slug' => $this->generateUniqueSlug($request->validated('name')),
-            ]);
-
-            if ($request->hasFile('logo')) {
-                $path = $request->validated('logo')->store('organizations/logos', 'public');
-                $organization->forceFill(['logo_url' => $path])->save();
-            }
-
-            $organization->members()->attach($request->user()->id, [
-                'role' => OrganizationMembershipRoleEnum::OWNER->value,
-                'joined_at' => now(),
-            ]);
-
-            return $organization;
-        });
-
+        $organization = $this->organizationService
+            ->createOrganization(
+                $request->validated(),
+                $request->user()->id,
+                $request->validated('logo')
+            );
         return ApiResponse::created(Message::ORGANIZATION_CREATED, new OrganizationResource($organization));
     }
 
