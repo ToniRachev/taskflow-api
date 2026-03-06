@@ -26,4 +26,5 @@ Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('organizations')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [OrganizationController::class, 'store'])->name(Routes::STORE_ORGANIZATION);
+    Route::get('/{organization}/members', [OrganizationController::class, 'index'])->name(Routes::GET_ORGANIZATION_DETAILS);
 });
