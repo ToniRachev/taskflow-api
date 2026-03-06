@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\V1;
 
 use App\Models\V1\Organization;
 use Illuminate\Http\Request;
