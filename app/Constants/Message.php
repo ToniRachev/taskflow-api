@@ -4,6 +4,7 @@ namespace App\Constants;
 
 class Message
 {
+    public const ORGANIZATION_CREATED = 'Organization created successfully';
     public const RESOURCE_CREATED = 'Resource created successfully';
     public const USER_LOGIN = 'User logged in successfully';
     public const USER_REGISTERED = 'User registered successfully';
