@@ -2,23 +2,38 @@
 
 namespace App\Models\V1;
 
+use App\Enums\V1\PlanEnum;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Model
 {
-    use HasUuid;
+    use HasUuid, SoftDeletes;
+
     protected $fillable = [
         'name',
         'slug',
-        'logo_url',
-        'plan',
         'settings',
-        'is_active'
+    ];
+
+    protected $attributes = [
+        'plan' => PlanEnum::FREE->value,
+        'is_active' => true,
     ];
 
     protected $casts = [
         'settings' => 'array',
         'is_active' => 'boolean',
+        'plan' => PlanEnum::class
     ];
+
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'organization_memberships')
+            ->withPivot('role', 'joined_at')
+            ->withTimestamps();
+    }
 }
