@@ -6,7 +6,6 @@ use App\Enums\V1\PlanEnum;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Model
@@ -29,6 +28,11 @@ class Organization extends Model
         'is_active' => 'boolean',
         'plan' => PlanEnum::class
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 
     public function members(): BelongsToMany
     {
