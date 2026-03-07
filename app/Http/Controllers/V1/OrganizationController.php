@@ -11,6 +11,7 @@ use App\Http\Resources\V1\Organization\OrganizationDetailResource;
 use App\Http\Resources\V1\Organization\OrganizationResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
+use App\Models\V1\User;
 use App\Services\V1\OrganizationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class OrganizationController extends Controller
 
     public function members(Organization $organization): JsonResponse
     {
+        $this->authorize('view', $organization);
         return ApiResponse::ok(data: MemberResource::collection($organization->members));
     }
 
