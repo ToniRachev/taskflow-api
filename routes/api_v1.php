@@ -30,4 +30,5 @@ Route::prefix('organizations')->middleware('auth:sanctum')->group(function () {
     Route::get('/{organization}/members', [OrganizationController::class, 'members'])->name(Routes::GET_ORGANIZATION_MEMBERS);
     Route::get('/{organization}', [OrganizationController::class, 'show'])->name(Routes::GET_ORGANIZATION_DETAILS);
     Route::patch('/{organization}', [OrganizationController::class, 'update'])->name(Routes::UPDATE_ORGANIZATION);
+    Route::delete('/{organization}', [OrganizationController::class, 'destroy'])->name(Routes::DESTROY_ORGANIZATION);
 });
