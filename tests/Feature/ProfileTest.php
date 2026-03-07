@@ -54,7 +54,7 @@ describe('profile', function () {
         ]);
 
     it('updates preferences', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
             $field => $value
         ])
             ->assertStatus(200)
@@ -68,7 +68,7 @@ describe('profile', function () {
         ]);
 
     it('fails for invalid preferences', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
             $field => $value
         ])
             ->assertStatus(422);
@@ -79,7 +79,7 @@ describe('profile', function () {
         ]);
 
     it('updates notifications', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
             'notifications' => [
                 $field => $value
             ]
@@ -94,7 +94,7 @@ describe('profile', function () {
         ]);
 
     it('fails on invalid notification data', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
             'notifications' => [
                 $field => $value
             ]
@@ -111,7 +111,7 @@ describe('profile', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg');
 
-        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::STORE_AVATAR), [
+        $this->withToken($this->token)->post(route(\App\Constants\Routes::STORE_AVATAR), [
             'avatar' => $file
         ])
             ->assertStatus(200)

@@ -60,8 +60,18 @@ class ApiResponse
         return self::error(Message::INVALID_CREDENTIALS, null, 401);
     }
 
-    public static function unauthorized(): JsonResponse
+    public static function unauthenticated(): JsonResponse
     {
-        return self::error(Message::UNAUTHORIZED, null, 401);
+        return self::error(Message::UNAUTHENTICATED, null, 401);
+    }
+
+    public static function notFound($message = Message::RESOURCE_NOT_FOUND, $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 404);
+    }
+
+    public static function unauthorized($message = Message::UNAUTHORIZED, $errors = null): JsonResponse
+    {
+        return self::error($message, $errors, 403);
     }
 }

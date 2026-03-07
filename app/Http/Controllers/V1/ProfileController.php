@@ -15,7 +15,7 @@ class ProfileController extends Controller
 {
     public function show(Request $request)
     {
-        return ApiResponse::ok(data: new UserResource($request->user()->load('profile')));
+        return ApiResponse::ok(data: UserResource::make($request->user()->load('profile')));
     }
 
     public function update(UpdateProfileRequest $request)
@@ -26,7 +26,7 @@ class ProfileController extends Controller
         if ($user->profile->isDirty()) {
             $user->profile->save();
         }
-        return ApiResponse::ok(data: new UserResource($user));
+        return ApiResponse::ok(data: UserResource::make($user));
     }
 
     public function updatePreferences(UpdatePreferencesRequest $request)
@@ -35,7 +35,7 @@ class ProfileController extends Controller
         $user->profile->forceFill([
             'preferences' => array_replace_recursive($user->profile->preferences, $request->validated())
         ])->save();
-        return ApiResponse::ok(data: new UserResource($user));
+        return ApiResponse::ok(data: UserResource::make($user));
     }
 
     public function updateAvatar(UpdateAvatarRequest $request)
@@ -50,7 +50,7 @@ class ProfileController extends Controller
         $path = $file->store('avatars', 'public');
         $user->profile->forceFill(['avatar_url' => $path])->save();
 
-        return ApiResponse::ok(data: new UserResource($user));
+        return ApiResponse::ok(data: UserResource::make($user));
     }
 
     public function deleteAvatar(Request $request)
