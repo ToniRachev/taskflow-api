@@ -5,7 +5,6 @@ namespace App\Policies\V1;
 use App\Enums\OrganizationMembershipRoleEnum;
 use App\Models\V1\Organization;
 use App\Models\V1\User;
-use Illuminate\Auth\Access\Response;
 
 class OrganizationPolicy
 {
@@ -21,6 +20,17 @@ class OrganizationPolicy
             $role = $member->pivot->role;
 
             return $role === OrganizationMembershipRoleEnum::ADMIN->value || $role === OrganizationMembershipRoleEnum::OWNER->value;
+        }
+
+        return false;
+    }
+
+    public function destroy(User $user, Organization $organization): bool
+    {
+        $member = $organization->members->where('id', $user->id)->first();
+
+        if ($member && $member->pivot->role === OrganizationMembershipRoleEnum::OWNER->value) {
+            return true;
         }
 
         return false;
