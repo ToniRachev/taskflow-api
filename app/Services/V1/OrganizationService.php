@@ -14,7 +14,7 @@ class OrganizationService
     private function generateUniqueSlug($name): string
     {
         $slug = Str::slug($name);
-        if (Organization::where('slug', $slug)->exists()) {
+        if (Organization::withTrashed()->where('slug', $slug)->exists()) {
             return $this->generateUniqueSlug($name . '-' . Str::random(6));
         }
 
