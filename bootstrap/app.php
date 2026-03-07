@@ -61,7 +61,6 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (Throwable $e) {
-            dd(get_class($e), $e->getMessage(), $e->getTraceAsString());
             Log::error($e->getMessage());
             return ApiResponse::serverError();
         });
