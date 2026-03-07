@@ -23,7 +23,7 @@ class AuthController extends Controller
         return ApiResponse::created(
             Message::USER_REGISTERED,
             [
-                'user' => new UserResource($response['user']),
+                'user' => UserResource::make($response['user']),
                 'token' => $response['token'],
             ]
         );
@@ -36,7 +36,7 @@ class AuthController extends Controller
         return ApiResponse::ok(
             Message::USER_LOGIN,
             [
-                'user' => new UserResource($result['user']),
+                'user' => UserResource::make($result['user']),
                 'token' => $result['token'],
             ]
         );
