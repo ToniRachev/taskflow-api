@@ -60,4 +60,11 @@ class OrganizationController extends Controller
 
         return ApiResponse::ok(data: OrganizationResource::make($updatedOrganization));
     }
+
+    public function destroy(Organization $organization): JsonResponse
+    {
+        $this->authorize('destroy', $organization);
+        $organization->delete();
+        return ApiResponse::noContent();
+    }
 }
