@@ -11,6 +11,7 @@ class Message
     public const VALIDATION_ERROR = 'Validation error';
     public const SERVER_ERROR = 'Something went wrong. We are doing our best to fix it.';
     public const INVALID_CREDENTIALS = 'Invalid email address or password';
-    public const UNAUTHORIZED = 'Unauthorized';
+    public const UNAUTHENTICATED = 'Unauthorized';
     public const RESOURCE_NOT_FOUND = 'Resource not found';
+    public const UNAUTHORIZED = 'Unauthorized';
 }
