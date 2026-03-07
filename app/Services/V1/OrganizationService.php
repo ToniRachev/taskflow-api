@@ -6,6 +6,7 @@ use App\Enums\OrganizationMembershipRoleEnum;
 use App\Models\V1\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class OrganizationService
@@ -40,5 +41,28 @@ class OrganizationService
 
             return $organization;
         });
+    }
+
+    public function updateOrganization(Organization $organization, $data, $hasLogo): Organization
+    {
+        $organization->fill($data);
+
+        if ($organization->isDirty('name')) {
+            $organization->slug = $this->generateUniqueSlug($data['name']);
+        }
+
+        if ($hasLogo) {
+            if ($organization->logo_url) {
+                Storage::disk('public')->delete($organization->logo_url);
+            }
+
+            $organization->logo_url = $data['logo']->store('organizations/logos', 'public');
+        }
+
+        if ($organization->isDirty()) {
+            $organization->save();
+        }
+
+        return $organization;
     }
 }
