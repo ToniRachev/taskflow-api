@@ -111,7 +111,7 @@ describe('profile', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg');
 
-        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::STORE_AVATAR), [
+        $this->withToken($this->token)->post(route(\App\Constants\Routes::STORE_AVATAR), [
             'avatar' => $file
         ])
             ->assertStatus(200)
