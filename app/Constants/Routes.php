@@ -32,4 +32,13 @@ class Routes
     public const DESTROY_ORGANIZATION_MEMBER = 'organizations.members.destroy';
     public const LEAVE_ORGANIZATION = 'organizations.leave';
     public const TRANSFER_ORGANIZATION_OWNERSHIP = 'organizations.transfer-ownership';
+
+    //---Project----------------
+
+    public const STORE_PROJECT = 'projects.store';
+    public const INDEX_PROJECT = 'projects.index';
+    public const SHOW_PROJECT = 'projects.show';
+    public const UPDATE_PROJECT = 'projects.update';
+    public const DESTROY_PROJECT = 'projects.destroy';
+    public const ARCHIVE_PROJECT = 'projects.archive';
 }
