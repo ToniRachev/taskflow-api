@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -43,12 +44,12 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiResponse::notFound();
         });
 
-        $exceptions->render(function (AccessDeniedHttpException $e) {
-            return ApiResponse::unauthorized();
-        });
-
         $exceptions->render(function (AuthenticationException $e) {
             return ApiResponse::unauthenticated();
+        });
+
+        $exceptions->render(function (AccessDeniedHttpException $e) {
+            return ApiResponse::unauthorized();
         });
 
         $exceptions->render(function (InvalidCredentialsException $e) {
