@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Constants\Message;
 use App\Enums\V1\ProjectStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Project\StoreProjectRequest;
 use App\Http\Requests\V1\Project\UpdateProjectRequest;
+use App\Http\Resources\V1\Project\ProjectCreatedResource;
+use App\Http\Resources\V1\Project\ProjectListResource;
+use App\Http\Resources\V1\Project\ProjectResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
 use App\Models\V1\Project;
 use App\Services\V1\ProjectService;
-use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -25,7 +28,9 @@ class ProjectController extends Controller
     public function index(Organization $organization)
     {
         $this->authorize('viewAny', [Project::class, $organization]);
-        return Project::all();
+        return ApiResponse::ok(
+            data: ProjectListResource::collection(Project::all())
+        );
     }
 
     /**
@@ -34,10 +39,15 @@ class ProjectController extends Controller
     public function store(Organization $organization, StoreProjectRequest $request)
     {
         $this->authorize('create', [Project::class, $organization]);
-        return $this->projectService->createProject(
+        $project = $this->projectService->createProject(
             $request->validated(),
             $request->user()->id,
             $organization->id
+        );
+
+        return ApiResponse::created(
+            Message::PROJECT_CREATED,
+            ProjectCreatedResource::make($project)
         );
     }
 
@@ -47,7 +57,7 @@ class ProjectController extends Controller
     public function show(Organization $organization, Project $project)
     {
         $this->authorize('view', [Project::class, $project]);
-        return $project;
+        return ApiResponse::ok(data: ProjectResource::make($project));
     }
 
     /**
@@ -57,7 +67,7 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
         $this->projectService->updateProject($request->validated(), $project);
-        return $project;
+        return ApiResponse::ok(data: ProjectResource::make($project));
     }
 
     /**
