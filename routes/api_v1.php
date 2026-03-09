@@ -4,6 +4,7 @@ use App\Constants\Routes;
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\OrganizationController;
 use App\Http\Controllers\V1\ProfileController;
+use App\Http\Controllers\V1\ProjectController;
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name(Routes::REGISTER);
@@ -27,8 +28,22 @@ Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
 Route::prefix('organizations')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [OrganizationController::class, 'store'])->name(Routes::STORE_ORGANIZATION);
     Route::get('/', [OrganizationController::class, 'index'])->name(Routes::GET_USER_ORGANIZATIONS);
-    Route::get('/{organization}/members', [OrganizationController::class, 'members'])->name(Routes::GET_ORGANIZATION_MEMBERS);
-    Route::get('/{organization}', [OrganizationController::class, 'show'])->name(Routes::GET_ORGANIZATION_DETAILS);
-    Route::patch('/{organization}', [OrganizationController::class, 'update'])->name(Routes::UPDATE_ORGANIZATION);
-    Route::delete('/{organization}', [OrganizationController::class, 'destroy'])->name(Routes::DESTROY_ORGANIZATION);
+
+    Route::prefix('/{organization}')->group(function () {
+        Route::get('/', [OrganizationController::class, 'show'])->name(Routes::GET_ORGANIZATION_DETAILS);
+        Route::get('/members', [OrganizationController::class, 'members'])->name(Routes::GET_ORGANIZATION_MEMBERS);
+        Route::patch('/', [OrganizationController::class, 'update'])->name(Routes::UPDATE_ORGANIZATION);
+        Route::delete('/', [OrganizationController::class, 'destroy'])->name(Routes::DESTROY_ORGANIZATION);
+
+        Route::prefix('projects')->group(function () {
+            Route::get('/', [ProjectController::class, 'index'])->name(Routes::INDEX_PROJECT);
+            Route::post('/', [ProjectController::class, 'store'])->name(Routes::STORE_PROJECT);
+            Route::prefix('/{project}')->group(function () {
+                Route::get('/', [ProjectController::class, 'show'])->name(Routes::SHOW_PROJECT);
+                Route::patch('/', [ProjectController::class, 'update'])->name(Routes::UPDATE_PROJECT);
+                Route::delete('/', [ProjectController::class, 'destroy'])->name(Routes::DESTROY_PROJECT);
+                Route::post('/archive', [ProjectController::class, 'archiveProject'])->name(Routes::ARCHIVE_PROJECT);
+            });
+        });
+    });
 });

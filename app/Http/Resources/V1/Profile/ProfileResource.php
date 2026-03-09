@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Profile;
 
 use App\Models\V1\Profile;
 use Illuminate\Http\Request;

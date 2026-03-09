@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Project;
 
-use App\Http\Resources\V1\Profile\ProfileResource;
-use App\Models\V1\User;
+use App\Models\V1\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin User
+ * @mixin Project
  */
-class UserResource extends JsonResource
+class ProjectBaseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,12 +21,13 @@ class UserResource extends JsonResource
         return [
             'id' => $this->uuid,
             'name' => $this->name,
-            'email' => $this->email,
+            'key' => $this->key,
             'status' => $this->status,
-            'profile' => new ProfileResource($this->whenLoaded('profile')),
+            'visibility' => $this->visibility,
+            'startDate' => $this->start_date,
+            'endDate' => $this->end_date,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'lastSeenAt' => $this->last_seen_at,
         ];
     }
 }
