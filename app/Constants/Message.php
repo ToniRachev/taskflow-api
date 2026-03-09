@@ -14,4 +14,5 @@ class Message
     public const UNAUTHENTICATED = 'Unauthorized';
     public const RESOURCE_NOT_FOUND = 'Resource not found';
     public const UNAUTHORIZED = 'Unauthorized';
+    public const PROJECT_CREATED = 'Project created successfully';
 }
