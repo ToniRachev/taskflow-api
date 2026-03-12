@@ -5,13 +5,14 @@ namespace App\Models\V1;
 use App\Enums\V1\ProjectStatusEnum;
 use App\Enums\V1\ProjectVisibilityEnum;
 use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasUuid, SoftDeletes;
+    use HasUuid, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
