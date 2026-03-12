@@ -2,9 +2,8 @@
 
 namespace App\Services\V1;
 
-use App\Enums\OrganizationMembershipRoleEnum;
+use App\Enums\V1\MembershipRoleEnum;
 use App\Models\V1\Organization;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -35,7 +34,7 @@ class OrganizationService
             }
 
             $organization->members()->attach($userId, [
-                'role' => OrganizationMembershipRoleEnum::OWNER->value,
+                'role' => MembershipRoleEnum::OWNER->value,
                 'joined_at' => now(),
             ]);
 

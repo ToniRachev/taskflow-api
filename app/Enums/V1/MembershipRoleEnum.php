@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\V1;
 
-enum OrganizationMembershipRoleEnum: string
+enum MembershipRoleEnum: string
 {
     case OWNER = 'owner';
     case ADMIN = 'admin';
