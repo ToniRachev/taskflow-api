@@ -2,7 +2,7 @@
 
 namespace App\Models\V1;
 
-use App\Enums\MembershipRoleEnum;
+use App\Enums\V1\MembershipRoleEnum;
 use App\Enums\V1\PlanEnum;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

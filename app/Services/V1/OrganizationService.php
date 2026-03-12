@@ -2,9 +2,8 @@
 
 namespace App\Services\V1;
 
-use App\Enums\MembershipRoleEnum;
+use App\Enums\V1\MembershipRoleEnum;
 use App\Models\V1\Organization;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

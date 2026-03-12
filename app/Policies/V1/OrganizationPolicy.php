@@ -2,7 +2,7 @@
 
 namespace App\Policies\V1;
 
-use App\Enums\MembershipRoleEnum;
+use App\Enums\V1\MembershipRoleEnum;
 use App\Models\V1\Organization;
 use App\Models\V1\User;
 
