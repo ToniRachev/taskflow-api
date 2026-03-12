@@ -48,7 +48,7 @@ describe('create organization', function () {
         $organization = \App\Models\V1\Organization::where('uuid', $response->json('data.id'))->first();
         $owner = $organization->members->where('id', $this->user->id)->first();
         expect($owner->id)->toBe($this->user->id)
-            ->and($owner->pivot->role)->toBe(\App\Enums\OrganizationMembershipRoleEnum::OWNER->value);
+            ->and($owner->pivot->role)->toBe(\App\Enums\MembershipRoleEnum::OWNER->value);
     });
 
     it('fails if no authorized', function () {
@@ -74,7 +74,7 @@ describe('fetch organizations', function () {
         $this->actingAs($this->user);
         \App\Models\V1\Organization::factory(3)->create()->each(function ($org) {
             $org->members()->attach($this->user->id, [
-                'role' => fake()->randomElement(\App\Enums\OrganizationMembershipRoleEnum::cases())->value
+                'role' => fake()->randomElement(\App\Enums\MembershipRoleEnum::cases())->value
             ]);
         });
 
@@ -93,7 +93,7 @@ describe('fetch organizations', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::MEMBER->value,
+            'role' => \App\Enums\MembershipRoleEnum::MEMBER->value,
         ]);
 
         $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_DETAILS, $organization->uuid))
@@ -121,7 +121,7 @@ describe('fetch organizations', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::MEMBER->value,
+            'role' => \App\Enums\MembershipRoleEnum::MEMBER->value,
         ]);
 
         $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_DETAILS, $organization->uuid))
@@ -133,7 +133,7 @@ describe('fetch organizations', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::MEMBER->value,
+            'role' => \App\Enums\MembershipRoleEnum::MEMBER->value,
         ]);
 
         $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_MEMBERS, $organization->uuid))
@@ -156,7 +156,7 @@ describe('updates org', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::OWNER->value,
+            'role' => \App\Enums\MembershipRoleEnum::OWNER->value,
         ]);
 
         $this->patch(route(\App\Constants\Routes::UPDATE_ORGANIZATION, $organization->uuid), [
@@ -183,7 +183,7 @@ describe('delete organization', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::OWNER->value,
+            'role' => \App\Enums\MembershipRoleEnum::OWNER->value,
         ]);
 
 
@@ -200,7 +200,7 @@ describe('delete organization', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
 
         $organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::ADMIN->value,
+            'role' => \App\Enums\MembershipRoleEnum::ADMIN->value,
         ]);
 
 

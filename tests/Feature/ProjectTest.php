@@ -25,7 +25,7 @@ describe('creates a project', function () {
     it('successfully creates a project', function () {
 
         $this->organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::OWNER->value,
+            'role' => \App\Enums\MembershipRoleEnum::OWNER->value,
             'joined_at' => now(),
         ]);
 
@@ -57,7 +57,7 @@ describe('creates a project', function () {
 
     it('fails to create if user is not organization admin', function () {
         $this->organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::MEMBER,
+            'role' => \App\Enums\MembershipRoleEnum::MEMBER,
             'joined_at' => now()
         ]);
 
@@ -71,7 +71,7 @@ describe('creates a project', function () {
 describe('updates project', function () {
     it('updates successfully project', function () {
         $this->organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::OWNER,
+            'role' => \App\Enums\MembershipRoleEnum::OWNER,
             'joined_at' => now()
         ]);
 
@@ -110,7 +110,7 @@ describe('updates project', function () {
 describe('deletes project', function () {
     it('delete project successfully', function () {
         $this->organization->members()->attach($this->user->id, [
-            'role' => \App\Enums\OrganizationMembershipRoleEnum::OWNER,
+            'role' => \App\Enums\MembershipRoleEnum::OWNER,
             'joined_at' => now()
         ]);
 

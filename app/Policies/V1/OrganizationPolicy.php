@@ -2,7 +2,7 @@
 
 namespace App\Policies\V1;
 
-use App\Enums\OrganizationMembershipRoleEnum;
+use App\Enums\MembershipRoleEnum;
 use App\Models\V1\Organization;
 use App\Models\V1\User;
 
@@ -19,7 +19,7 @@ class OrganizationPolicy
         if ($member) {
             $role = $member->pivot->role;
 
-            return $role === OrganizationMembershipRoleEnum::ADMIN->value || $role === OrganizationMembershipRoleEnum::OWNER->value;
+            return $role === MembershipRoleEnum::ADMIN->value || $role === MembershipRoleEnum::OWNER->value;
         }
 
         return false;
@@ -29,7 +29,7 @@ class OrganizationPolicy
     {
         $member = $organization->members->where('id', $user->id)->first();
 
-        if ($member && $member->pivot->role === OrganizationMembershipRoleEnum::OWNER->value) {
+        if ($member && $member->pivot->role === MembershipRoleEnum::OWNER->value) {
             return true;
         }
 
