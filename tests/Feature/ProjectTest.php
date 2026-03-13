@@ -16,8 +16,8 @@ beforeEach(function () {
         'description' => fake()->sentence(20),
         'status' => fake()->randomElement(ProjectStatusEnum::cases())->value,
         'visibility' => fake()->randomElement(ProjectVisibilityEnum::cases())->value,
-        'start_date' => $startDate = fake()->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
-        'end_date' => fake()->dateTimeBetween($startDate, '+1 year')->format('Y-m-d'),
+        'startDate' => $startDate = fake()->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
+        'endDate' => fake()->dateTimeBetween($startDate, '+1 year')->format('Y-m-d'),
     ];
 });
 

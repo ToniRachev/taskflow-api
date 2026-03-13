@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1\Organization;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\V1\BaseFormRequest;
 
-class StoreOrganizationRequest extends FormRequest
+class StoreOrganizationRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

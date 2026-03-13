@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\V1\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\V1\BaseFormRequest;
 
-class LoginAuthRequest extends FormRequest
+class LoginAuthRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
