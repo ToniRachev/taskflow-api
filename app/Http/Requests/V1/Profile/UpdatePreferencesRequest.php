@@ -4,10 +4,11 @@ namespace App\Http\Requests\V1\Profile;
 
 use App\Enums\V1\ThemePreferenceEnum;
 use App\Helpers\ArrayHelper;
+use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class UpdatePreferencesRequest extends FormRequest
+class UpdatePreferencesRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,11 +16,6 @@ class UpdatePreferencesRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        $this->merge(ArrayHelper::toSnakeKeys($this->all()));
     }
 
     /**

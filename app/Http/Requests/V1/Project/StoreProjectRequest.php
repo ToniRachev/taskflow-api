@@ -3,11 +3,10 @@
 namespace App\Http\Requests\V1\Project;
 
 use App\Enums\V1\ProjectVisibilityEnum;
-use App\Models\V1\Project;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreProjectRequest extends FormRequest
+class StoreProjectRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

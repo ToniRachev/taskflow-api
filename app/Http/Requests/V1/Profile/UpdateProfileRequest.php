@@ -3,9 +3,10 @@
 namespace App\Http\Requests\V1\Profile;
 
 use App\Helpers\ArrayHelper;
+use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfileRequest extends FormRequest
+class UpdateProfileRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,11 +14,6 @@ class UpdateProfileRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    public function prepareForValidation(): void
-    {
-        $this->merge(ArrayHelper::toSnakeKeys($this->all()));
     }
 
     /**

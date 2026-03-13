@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests\V1\Organization;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\V1\BaseFormRequest;
 
-class UpdateOrganizationRequest extends FormRequest
+class UpdateOrganizationRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('organization'));
+        return true;
     }
 
     /**

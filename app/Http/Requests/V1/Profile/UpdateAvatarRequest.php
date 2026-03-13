@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1\Profile;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\V1\BaseFormRequest;
 
-class UpdateAvatarRequest extends FormRequest
+class UpdateAvatarRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
