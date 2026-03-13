@@ -15,4 +15,5 @@ class Message
     public const RESOURCE_NOT_FOUND = 'Resource not found';
     public const UNAUTHORIZED = 'Unauthorized';
     public const PROJECT_CREATED = 'Project created successfully';
+    public const TASK_CREATED = 'Task created successfully';
 }

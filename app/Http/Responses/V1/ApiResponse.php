@@ -4,6 +4,7 @@ namespace App\Http\Responses\V1;
 
 use App\Constants\Message;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiResponse
 {
@@ -25,7 +26,6 @@ class ApiResponse
         ], $code);
     }
 
-
     //---Success-----------------------
 
     public static function ok($message = 'Ok', $data = null): JsonResponse
@@ -41,6 +41,25 @@ class ApiResponse
     public static function noContent(): JsonResponse
     {
         return self::success(code: 204);
+    }
+
+    public static function withPagination(LengthAwarePaginator $paginator, $resource): JsonResponse
+    {
+        $items = $resource::collection($paginator->items());
+        return self::ok(
+            data: [
+                'items' => $items,
+                'pagination' => [
+                    'meta' => [
+                        'currentPage' => $paginator->currentPage(),
+                        'lastPage' => $paginator->lastPage(),
+                        'perPage' => $paginator->perPage(),
+                        'total' => $paginator->total(),
+                    ],
+                    'links' => $paginator->linkCollection(),
+                ]
+            ]
+        );
     }
 
     //---Errors-----------------------
