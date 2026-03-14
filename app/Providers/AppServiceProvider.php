@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        User::observe(UserObserver::class);
         Password::defaults(function () {
             return Password::min(8)
                 ->mixedCase()
