@@ -65,4 +65,15 @@ class Organization extends Model
             ->where('user_id', $user->id)
             ->exists();
     }
+
+    public function canModify(User $user): bool
+    {
+        return $this->members()
+            ->where('user_id', $user->id)
+            ->whereIn('role', [
+                MembershipRoleEnum::ADMIN->value,
+                MembershipRoleEnum::OWNER->value,
+                MembershipRoleEnum::MEMBER,
+            ])->exists();
+    }
 }

@@ -41,4 +41,19 @@ class Routes
     public const UPDATE_PROJECT = 'projects.update';
     public const DESTROY_PROJECT = 'projects.destroy';
     public const ARCHIVE_PROJECT = 'projects.archive';
+
+    //---Tasks----------------
+    public const STORE_TASK = 'tasks.store';
+    public const INDEX_TASK = 'tasks.index';
+    public const SHOW_TASK = 'tasks.show';
+    public const UPDATE_TASK = 'tasks.update';
+    public const DESTROY_TASK = 'tasks.destroy';
+    public const UPDATE_TASK_STATUS = 'tasks.status.update';
+    public const UPDATE_TASK_ASSIGNEE = 'tasks.assignee.update';
+    public const UPDATE_TASK_PRIORITY = 'tasks.priority.update';
+    public const STORE_SUBTASK = 'tasks.subtasks.store';
+    public const INDEX_SUBTASK = 'tasks.subtasks.index';
+    public const INDEX_TASK_ACTIVITY = 'tasks.activity.index';
+    public const BULK_UPDATE_TASK_STATUS = 'tasks.status.bulk';
+    public const SEARCH_TASK = 'tasks.search';
 }
