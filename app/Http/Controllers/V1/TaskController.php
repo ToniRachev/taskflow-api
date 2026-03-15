@@ -13,12 +13,15 @@ use App\Http\Requests\V1\Task\UpdateTaskRequest;
 use App\Http\Requests\V1\Task\UpdateTaskStatusRequest;
 use App\Http\Resources\V1\Task\BaseTaskResource;
 use App\Http\Resources\V1\Task\CreatedTaskResource;
+use App\Http\Resources\V1\Task\TaskActivityResource;
 use App\Http\Resources\V1\Task\TaskResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
 use App\Models\V1\Project;
 use App\Models\V1\Task;
 use App\Services\V1\TaskService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function array_merge;
 
 class TaskController extends Controller
@@ -172,8 +175,14 @@ class TaskController extends Controller
         );
     }
 
-    public function indexActivity()
+    public function indexActivity(
+        Organization $organization,
+        Project      $project,
+        string       $taskId
+    )
     {
-
+        $this->authorize('view', [Task::class, $organization]);
+        $task = Task::where('uuid', $taskId)->withTrashed()->firstOrFail();
+        return ApiResponse::withPagination($task->activity()->latest()->paginate(10), TaskActivityResource::class);
     }
 }

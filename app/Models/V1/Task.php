@@ -6,14 +6,18 @@ use App\Enums\V1\TaskPriorityEnum;
 use App\Enums\V1\TaskStatusEnum;
 use App\Enums\V1\TaskTypeEnum;
 use App\Filters\V1\TaskFilter;
+use App\Observers\V1\TaskObserver;
 use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([TaskObserver::class])]
 class Task extends Model
 {
     use HasUuid, HasFactory, SoftDeletes;
@@ -97,5 +101,10 @@ class Task extends Model
     public function subtasks(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
+    }
+
+    public function activity(): MorphMany
+    {
+        return $this->morphMany(ActivityLog::class, 'loggable');
     }
 }
