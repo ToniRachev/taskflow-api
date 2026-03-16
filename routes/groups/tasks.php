@@ -3,10 +3,6 @@
 use App\Constants\Routes;
 use App\Http\Controllers\V1\TaskController;
 
-Route::get('/', [TaskController::class, 'index'])->name(Routes::INDEX_TASK);
-Route::post('/', [TaskController::class, 'store'])->name(Routes::STORE_TASK);
-Route::patch('/bulk-status', [TaskController::class, 'updateBulkStatus'])->name(Routes::BULK_UPDATE_TASK_STATUS);
-
 Route::prefix('/{task}')->group(function () {
     Route::get('/', [TaskController::class, 'show'])->name(Routes::SHOW_TASK);
     Route::patch('/', [TaskController::class, 'update'])->name(Routes::UPDATE_TASK);

@@ -25,6 +25,7 @@ class CreatedTaskResource extends BaseTaskResource
                 'name' => $this->reporter->name,
             ],
             'updatedAt' => $this->updated_at,
+            'parentId' => $this->parent?->uuid,
         ]);
     }
 }

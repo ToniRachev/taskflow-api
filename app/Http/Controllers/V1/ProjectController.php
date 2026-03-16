@@ -21,7 +21,6 @@ class ProjectController extends Controller
     {
     }
 
-
     /**
      * Display a listing of the resource.
      */
@@ -54,7 +53,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Organization $organization, Project $project)
+    public function show(Project $project)
     {
         $this->authorize('view', [Project::class, $project]);
         return ApiResponse::ok(data: ProjectResource::make($project));
@@ -63,7 +62,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Organization $organization, Project $project)
+    public function update(Project $project, UpdateProjectRequest $request)
     {
         $this->authorize('update', $project);
         $this->projectService->updateProject($request->validated(), $project);
@@ -73,14 +72,14 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Organization $organization, Project $project)
+    public function destroy(Project $project)
     {
         $this->authorize('delete', $project);
         $project->delete();
         return ApiResponse::noContent();
     }
 
-    public function archiveProject(Organization $organization, Project $project)
+    public function archiveProject(Project $project)
     {
         $this->authorize('archive', $project);
         if ($project->status !== ProjectStatusEnum::ARCHIVED) {

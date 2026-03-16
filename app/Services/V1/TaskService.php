@@ -48,6 +48,28 @@ class TaskService
         });
     }
 
+    public function createSubtask($data, Task $task, $userId): Task
+    {
+        return DB::transaction(function () use ($data, $task, $userId) {
+            if (Arr::has($data, 'assignee_id')) {
+                $data['assignee_id'] = User::where(['uuid' => $data['assignee_id']])->first()->id;
+            }
+
+            $project = $task->project;
+
+            $referenceNumber = $this->getNextReferenceNumber($project);
+
+            return Task::create([
+                ...$data,
+                'reporter_id' => $userId,
+                'project_id' => $project->id,
+                'reference' => $this->generateReference($project->key, $referenceNumber),
+                'reference_number' => $referenceNumber,
+                'order' => $this->getNextOrder($data['status'], $project),
+            ]);
+        });
+    }
+
     public function updateTask($data, Task $task): Task
     {
         $task->fill($data);
