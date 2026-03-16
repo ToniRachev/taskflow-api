@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Organization;
+namespace App\Http\Resources\V1;
 
 use App\Models\V1\Organization;
 use Illuminate\Http\Request;
@@ -26,7 +26,9 @@ class OrganizationResource extends JsonResource
             'plan' => $this->plan,
             'isActive' => $this->is_active,
             'role' => $this->whenPivotLoaded('organization_memberships', fn() => $this->pivot->role),
+            'membersCount' => $this->whenCounted('members'),
             'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at
         ];
     }
 }

@@ -20,10 +20,11 @@ class AuthController extends Controller
     public function register(RegisterAuthRequest $request)
     {
         $response = $this->authService->register($request->validated());
+        $user = $response['user']->load('profile');
         return ApiResponse::created(
             Message::USER_REGISTERED,
             [
-                'user' => UserResource::make($response['user']),
+                'user' => UserResource::make($user),
                 'token' => $response['token'],
             ]
         );
@@ -32,11 +33,11 @@ class AuthController extends Controller
     public function login(LoginAuthRequest $request)
     {
         $result = $this->authService->login($request->validated());
-
+        $user = $result['user']->load('profile');
         return ApiResponse::ok(
             Message::USER_LOGIN,
             [
-                'user' => UserResource::make($result['user']),
+                'user' => UserResource::make($user),
                 'token' => $result['token'],
             ]
         );
