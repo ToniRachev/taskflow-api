@@ -8,10 +8,9 @@ use App\Http\Requests\V1\Organization\StoreOrganizationRequest;
 use App\Http\Requests\V1\Organization\UpdateOrganizationRequest;
 use App\Http\Resources\V1\MemberResource;
 use App\Http\Resources\V1\Organization\OrganizationDetailResource;
-use App\Http\Resources\V1\Organization\OrganizationResource;
+use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
-use App\Models\V1\User;
 use App\Services\V1\OrganizationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -48,7 +47,7 @@ class OrganizationController extends Controller
     public function show(Organization $organization): JsonResponse
     {
         $this->authorize('view', $organization);
-        return ApiResponse::ok(data: OrganizationDetailResource::make($organization->loadCount('members')));
+        return ApiResponse::ok(data: OrganizationResource::make($organization->loadCount('members')));
     }
 
     public function update(UpdateOrganizationRequest $request, Organization $organization): JsonResponse

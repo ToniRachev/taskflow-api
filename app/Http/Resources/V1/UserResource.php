@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\Profile\ProfileResource;
 use App\Models\V1\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,7 +23,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'status' => $this->status,
-            'profile' => new ProfileResource($this->whenLoaded('profile')),
+            'profile' => $this->whenLoaded('profile', fn() => new ProfileResource($this->profile)),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'lastSeenAt' => $this->last_seen_at,

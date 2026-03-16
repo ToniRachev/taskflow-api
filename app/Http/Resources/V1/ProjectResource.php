@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Resources\V1\Project;
+namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\BaseResource;
 use App\Models\V1\Project;
 use Illuminate\Http\Request;
 

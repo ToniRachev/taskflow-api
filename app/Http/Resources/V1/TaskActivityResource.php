@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Resources\V1\Task;
+namespace App\Http\Resources\V1;
 
 use App\Models\V1\ActivityLog;
-use App\Models\V1\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use function collect;
