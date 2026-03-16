@@ -25,15 +25,6 @@ class UpdateProjectRequest extends BaseFormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'key' => [
-                'sometimes',
-                'string',
-                'max:10',
-                'alpha_num',
-                Rule::unique('projects', 'key')
-                    ->where('organization_id', $this->route('organization')->id)
-                    ->ignore($this->route('project')->id)
-            ],
             'description' => ['nullable', 'string'],
             'visibility' => ['sometimes', Rule::enum(ProjectVisibilityEnum::class)],
             'start_date' => ['nullable', 'date'],
