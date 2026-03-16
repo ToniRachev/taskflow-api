@@ -8,8 +8,6 @@ use App\Enums\V1\TaskStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Project\StoreProjectRequest;
 use App\Http\Requests\V1\Project\UpdateProjectRequest;
-use App\Http\Resources\V1\Project\ProjectCreatedResource;
-use App\Http\Resources\V1\Project\ProjectListResource;
 use App\Http\Resources\V1\Project\ProjectResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
