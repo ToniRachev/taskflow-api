@@ -282,7 +282,7 @@ describe('GET /tasks/{task} — show', function () {
             'data' => [
                 'id', 'reference', 'title', 'status',
                 'priority', 'type', 'reporter', 'assignee',
-                'subtaskCount', 'commentCount', 'activity',
+                'subtaskCount', 'activity',
             ],
         ]);
     });
@@ -667,7 +667,7 @@ describe('GET /tasks/{task}/subtasks — index subtasks', function () {
             [$this->task->uuid]
         ))->assertOk();
 
-        expect($response->json('data'))->toHaveCount(1);
+        expect($response->json('data.items'))->toHaveCount(1);
     });
 
     it('returns empty array if no subtasks', function () {
@@ -678,7 +678,7 @@ describe('GET /tasks/{task}/subtasks — index subtasks', function () {
             [$this->task->uuid]
         ))->assertOk();
 
-        expect($response->json('data'))->toBeEmpty();
+        expect($response->json('data.items'))->toBeEmpty();
     });
 
     it('fails if unauthenticated', function () {
