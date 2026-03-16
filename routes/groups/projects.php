@@ -4,8 +4,7 @@ use App\Constants\Routes;
 use App\Http\Controllers\V1\ProjectController;
 use App\Http\Controllers\V1\TaskController;
 
-Route::get('/', [ProjectController::class, 'index'])->name(Routes::INDEX_PROJECT);
-Route::post('/', [ProjectController::class, 'store'])->name(Routes::STORE_PROJECT);
+
 Route::prefix('/{project}')->group(function () {
     Route::prefix('tasks')->group(base_path('routes/groups/tasks.php'));
 
