@@ -81,7 +81,7 @@ describe('updates project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$this->organization->uuid, $project->uuid]), [
+        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$project->uuid]), [
             'name' => 'new project name',
         ])
             ->assertStatus(200)
@@ -100,7 +100,7 @@ describe('updates project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$this->organization->uuid, $project->uuid]), [
+        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$project->uuid]), [
             'name' => 'new project name',
         ])
             ->assertStatus(403);
@@ -120,26 +120,26 @@ describe('deletes project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$this->organization->uuid, $project->uuid]))
+        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$project->uuid]))
             ->assertStatus(204);
 
         $this->assertSoftDeleted('projects', [
-           'id' => $project->id
+            'id' => $project->id
         ]);
     });
 
-    it('fails to delete if not admin or owner', function() {
+    it('fails to delete if not admin or owner', function () {
         $this->actingAs($this->user);
         $project = \App\Models\V1\Project::factory()->create([
             'owner_id' => $this->user->id,
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$this->organization->uuid, $project->uuid]))
+        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$project->uuid]))
             ->assertStatus(403);
 
         $this->assertDatabaseHas('projects', [
-           'id' => $project->id,
+            'id' => $project->id,
         ]);
     });
 });
