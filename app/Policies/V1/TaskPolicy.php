@@ -35,7 +35,7 @@ class TaskPolicy
 
     public function createSubtask(User $user, Task $task): bool
     {
-        return $task->project->organization->isMember($user);
+        return $task->project->organization->canModify($user);
     }
 
     /**

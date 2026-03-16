@@ -130,7 +130,7 @@ class TaskController extends Controller
         Task $task
     )
     {
-        $this->authorize('view', [Task::class, $task]);
+        $this->authorize('view', [$task]);
         return ApiResponse::ok(data: BaseTaskResource::collection($task->subtasks));
     }
 
@@ -139,7 +139,7 @@ class TaskController extends Controller
         StoreTaskRequest $request
     )
     {
-        $this->authorize('createSubtask', [Task::class, $task]);
+        $this->authorize('createSubtask', [$task]);
         $data = array_merge($request->validated(), ['parent_id' => $task->id]);
         return ApiResponse::created(
             data: CreatedTaskResource::make(
