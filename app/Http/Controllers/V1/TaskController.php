@@ -11,18 +11,14 @@ use App\Http\Requests\V1\Task\UpdateTaskBulkStatusRequest;
 use App\Http\Requests\V1\Task\UpdateTaskPriorityRequest;
 use App\Http\Requests\V1\Task\UpdateTaskRequest;
 use App\Http\Requests\V1\Task\UpdateTaskStatusRequest;
-use App\Http\Resources\V1\Task\BaseTaskResource;
-use App\Http\Resources\V1\Task\CreatedTaskResource;
 use App\Http\Resources\V1\Task\TaskActivityResource;
 use App\Http\Resources\V1\Task\TaskResource;
 use App\Http\Responses\V1\ApiResponse;
-use App\Models\V1\Organization;
 use App\Models\V1\Project;
 use App\Models\V1\Task;
 use App\Services\V1\TaskService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function array_merge;
+use function request;
 
 class TaskController extends Controller
 {
@@ -33,8 +29,12 @@ class TaskController extends Controller
     public function index(Project $project, TaskFilter $filters)
     {
         $this->authorize('viewAny', [Task::class, $project]);
-        $tasks = Task::filter($filters)->paginate($filters->getPerPage())->appends(request()->query());
-        return ApiResponse::withPagination($tasks, BaseTaskResource::class);
+        $tasks = Task::filter($filters)
+            ->with('assignee.profile')
+            ->latest()
+            ->paginate($filters->getPerPage())
+            ->appends(request()->query());
+        return ApiResponse::withPagination($tasks, TaskResource::class);
     }
 
     public function store(Project $project, StoreTaskRequest $request)
@@ -44,18 +44,30 @@ class TaskController extends Controller
         $task = $this->taskService->createTask(
             $request->validated(),
             $request->user()->id,
-            $project);
+            $project)
+            ->load([
+                'assignee.profile',
+                'parent',
+                'reporter'
+            ]);
 
         return ApiResponse::created(
             Message::TASK_CREATED,
-            CreatedTaskResource::make($task)
+            TaskResource::make($task, created: true)
         );
     }
 
     public function show(Task $task)
     {
         $this->authorize('view', $task);
-        return ApiResponse::ok(data: TaskResource::make($task));
+        $task->load([
+            'assignee',
+            'reporter',
+            'parent',
+            'parent',
+            'activity' => fn($query) => $query->with('user')->latest()->limit(10),
+        ])->loadCount('subtasks');
+        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
     }
 
     public function update(
@@ -64,11 +76,18 @@ class TaskController extends Controller
     )
     {
         $this->authorize('update', [$task]);
+        $task = ($this->taskService
+            ->updateTask(
+                $request->validated(), $task
+            ))->load([
+            'assignee',
+            'reporter',
+            'parent',
+            'parent',
+            'activity' => fn($query) => $query->with('user')->latest()->limit(10),
+        ])->loadCount('subtasks');
         return ApiResponse::ok(
-            data: TaskResource::make($this->taskService
-                ->updateTask(
-                    $request->validated(), $task
-                ))
+            data: TaskResource::make($task, detailed: true)
         );
     }
 
@@ -87,13 +106,18 @@ class TaskController extends Controller
     )
     {
         $this->authorize('update', [$task]);
-        return ApiResponse::ok(
-            data: TaskResource::make($this->taskService
-                ->updateStatus(
-                    $request->validated('status'),
-                    $task
-                ))
-        );
+        $task = $this->taskService
+            ->updateStatus(
+                $request->validated('status'),
+                $task
+            )->load([
+                'assignee',
+                'reporter',
+                'parent',
+                'parent',
+                'activity' => fn($query) => $query->with('user')->latest()->limit(10),
+            ])->loadCount('subtasks');
+        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
     }
 
     public function updateAssignee(
@@ -102,13 +126,18 @@ class TaskController extends Controller
     )
     {
         $this->authorize('assign', [$task]);
-        return ApiResponse::ok(
-            data: TaskResource::make($this->taskService
-                ->updateAssignee(
-                    $request->validated('assignee_id'),
-                    $task,
-                ))
-        );
+        $task = ($this->taskService
+            ->updateAssignee(
+                $request->validated('assignee_id'),
+                $task,
+            ))->load([
+            'assignee',
+            'reporter',
+            'parent',
+            'parent',
+            'activity' => fn($query) => $query->with('user')->latest()->limit(10),
+        ])->loadCount('subtasks');
+        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
     }
 
     public function updatePriority(
@@ -116,14 +145,21 @@ class TaskController extends Controller
         UpdateTaskPriorityRequest $request
     )
     {
+
         $this->authorize('update', [$task]);
+
+        $task = $this->taskService
+            ->updatePriority(
+                $request->validated('priority'),
+                $task)->load([
+                'assignee',
+                'reporter',
+                'parent',
+                'parent',
+                'activity' => fn($query) => $query->with('user')->latest()->limit(10),
+            ])->loadCount('subtasks');
         return ApiResponse::ok(
-            data: TaskResource::make($this->taskService
-                ->updatePriority(
-                    $request->validated('priority'),
-                    $task
-                ))
-        );
+            data: TaskResource::make($task, detailed: true));
     }
 
     public function indexSubtask(
@@ -131,7 +167,12 @@ class TaskController extends Controller
     )
     {
         $this->authorize('view', [$task]);
-        return ApiResponse::ok(data: BaseTaskResource::collection($task->subtasks));
+
+        $subtasks = $task->subtasks()->with('assignee.profile')
+            ->latest()
+            ->paginate();
+
+        return ApiResponse::withPagination($subtasks, TaskResource::class);
     }
 
     public function storeSubtask(
@@ -141,14 +182,18 @@ class TaskController extends Controller
     {
         $this->authorize('createSubtask', [$task]);
         $data = array_merge($request->validated(), ['parent_id' => $task->id]);
+        $task = $this->taskService->createSubtask(
+            $data,
+            $task,
+            $request->user()->id)
+            ->load([
+                'assignee.profile',
+                'parent',
+                'reporter'
+            ]);
+
         return ApiResponse::created(
-            data: CreatedTaskResource::make(
-                $this->taskService->createSubtask(
-                    $data,
-                    $task,
-                    $request->user()->id
-                )
-            ));
+            data: TaskResource::make($task, created: true));
     }
 
     public function updateBulkStatus(
