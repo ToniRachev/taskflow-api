@@ -15,4 +15,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('profile')->group(base_path('routes/groups/profile.php'));
     Route::prefix('organizations')->group(base_path('routes/groups/organizations.php'));
     Route::prefix('projects')->group(base_path('routes/groups/projects.php'));
+    Route::prefix('tasks')->group(base_path('routes/groups/tasks.php'));
 });
