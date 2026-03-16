@@ -30,17 +30,16 @@ class TaskController extends Controller
     {
     }
 
-
-    public function index(Organization $organization, Project $project, TaskFilter $filters)
+    public function index(Project $project, TaskFilter $filters)
     {
-        $this->authorize('viewAny', [Task::class, $organization]);
+        $this->authorize('viewAny', [Task::class, $project]);
         $tasks = Task::filter($filters)->paginate($filters->getPerPage())->appends(request()->query());
         return ApiResponse::withPagination($tasks, BaseTaskResource::class);
     }
 
-    public function store(Organization $organization, Project $project, StoreTaskRequest $request)
+    public function store(Project $project, StoreTaskRequest $request)
     {
-        $this->authorize('create', [Task::class, $organization]);
+        $this->authorize('create', [Task::class, $project]);
 
         $task = $this->taskService->createTask(
             $request->validated(),
@@ -53,20 +52,18 @@ class TaskController extends Controller
         );
     }
 
-    public function show(Organization $organization, Project $project, Task $task)
+    public function show(Task $task)
     {
-        $this->authorize('view', [Task::class, $organization]);
+        $this->authorize('view', $task);
         return ApiResponse::ok(data: TaskResource::make($task));
     }
 
     public function update(
-        Organization      $organization,
-        Project           $project,
         Task              $task,
         UpdateTaskRequest $request
     )
     {
-        $this->authorize('update', [$task, $organization]);
+        $this->authorize('update', [$task]);
         return ApiResponse::ok(
             data: TaskResource::make($this->taskService
                 ->updateTask(
@@ -76,24 +73,20 @@ class TaskController extends Controller
     }
 
     public function destroy(
-        Organization $organization,
-        Project      $project,
-        Task         $task,
+        Task $task,
     )
     {
-        $this->authorize('delete', [$task, $organization]);
+        $this->authorize('delete', [$task]);
         $task->delete();
         return ApiResponse::noContent();
     }
 
     public function updateStatus(
-        Organization            $organization,
-        Project                 $project,
         Task                    $task,
         UpdateTaskStatusRequest $request
     )
     {
-        $this->authorize('update', [$task, $organization]);
+        $this->authorize('update', [$task]);
         return ApiResponse::ok(
             data: TaskResource::make($this->taskService
                 ->updateStatus(
@@ -104,13 +97,11 @@ class TaskController extends Controller
     }
 
     public function updateAssignee(
-        Organization              $organization,
-        Project                   $project,
         Task                      $task,
         UpdateTaskAssigneeRequest $request
     )
     {
-        $this->authorize('assign', [$task, $organization]);
+        $this->authorize('assign', [$task]);
         return ApiResponse::ok(
             data: TaskResource::make($this->taskService
                 ->updateAssignee(
@@ -121,13 +112,11 @@ class TaskController extends Controller
     }
 
     public function updatePriority(
-        Organization              $organization,
-        Project                   $project,
         Task                      $task,
         UpdateTaskPriorityRequest $request
     )
     {
-        $this->authorize('update', [$task, $organization]);
+        $this->authorize('update', [$task]);
         return ApiResponse::ok(
             data: TaskResource::make($this->taskService
                 ->updatePriority(
@@ -138,34 +127,36 @@ class TaskController extends Controller
     }
 
     public function indexSubtask(
-        Organization $organization,
-        Project      $project,
-        Task         $task
+        Task $task
     )
     {
-        $this->authorize('viewAny', [Task::class, $organization]);
+        $this->authorize('view', [Task::class, $task]);
         return ApiResponse::ok(data: BaseTaskResource::collection($task->subtasks));
     }
 
     public function storeSubtask(
-        Organization     $organization,
-        Project          $project,
         Task             $task,
         StoreTaskRequest $request
     )
     {
-        $this->authorize('create', [Task::class, $organization]);
+        $this->authorize('createSubtask', [Task::class, $task]);
         $data = array_merge($request->validated(), ['parent_id' => $task->id]);
-        return ApiResponse::created(data: CreatedTaskResource::make($this->taskService->createTask($data, $request->user()->id, $project)));
+        return ApiResponse::created(
+            data: CreatedTaskResource::make(
+                $this->taskService->createSubtask(
+                    $data,
+                    $task,
+                    $request->user()->id
+                )
+            ));
     }
 
     public function updateBulkStatus(
-        Organization                $organization,
         Project                     $project,
         UpdateTaskBulkStatusRequest $request
     )
     {
-        $this->authorize('updateBulkStatus', [Task::class, $organization]);
+        $this->authorize('updateBulkStatus', [Task::class, $project]);
         return ApiResponse::ok(
             data: $this->taskService
                 ->updateBulkStatus(
@@ -176,13 +167,11 @@ class TaskController extends Controller
     }
 
     public function indexActivity(
-        Organization $organization,
-        Project      $project,
-        string       $taskId
+        string $taskId
     )
     {
-        $this->authorize('view', [Task::class, $organization]);
         $task = Task::where('uuid', $taskId)->withTrashed()->firstOrFail();
+        $this->authorize('view', [Task::class, $task]);
         return ApiResponse::withPagination($task->activity()->latest()->paginate(10), TaskActivityResource::class);
     }
 }
