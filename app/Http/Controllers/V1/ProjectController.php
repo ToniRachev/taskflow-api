@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Constants\Message;
 use App\Enums\V1\ProjectStatusEnum;
+use App\Enums\V1\TaskStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Project\StoreProjectRequest;
 use App\Http\Requests\V1\Project\UpdateProjectRequest;
@@ -27,9 +28,8 @@ class ProjectController extends Controller
     public function index(Organization $organization)
     {
         $this->authorize('viewAny', [Project::class, $organization]);
-        return ApiResponse::ok(
-            data: ProjectListResource::collection(Project::all())
-        );
+        $projects = $organization->projects()->withCount('tasks')->latest()->paginate(15);
+        return ApiResponse::withPagination($projects, ProjectResource::class);
     }
 
     /**
@@ -46,7 +46,7 @@ class ProjectController extends Controller
 
         return ApiResponse::created(
             Message::PROJECT_CREATED,
-            ProjectCreatedResource::make($project)
+            ProjectResource::created($project)
         );
     }
 
@@ -56,7 +56,16 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $this->authorize('view', [Project::class, $project]);
-        return ApiResponse::ok(data: ProjectResource::make($project));
+
+        $project->loadCount([
+            'tasks',
+            'tasks as completed_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::DONE),
+            'tasks as in_progress_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::IN_PROGRESS),
+            'tasks as backlog_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::BACKLOG),
+            'tasks as in_review_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::IN_REVIEW),
+            'tasks as todo_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::TODO),
+        ]);
+        return ApiResponse::ok(data: ProjectResource::detailed($project));
     }
 
     /**
@@ -66,7 +75,15 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
         $this->projectService->updateProject($request->validated(), $project);
-        return ApiResponse::ok(data: ProjectResource::make($project));
+        $project->loadCount([
+            'tasks',
+            'tasks as completed_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::DONE),
+            'tasks as in_progress_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::IN_PROGRESS),
+            'tasks as backlog_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::BACKLOG),
+            'tasks as in_review_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::IN_REVIEW),
+            'tasks as todo_tasks_count' => fn($q) => $q->where('status', TaskStatusEnum::TODO),
+        ]);
+        return ApiResponse::ok(data: ProjectResource::detailed($project));
     }
 
     /**

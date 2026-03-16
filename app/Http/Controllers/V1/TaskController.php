@@ -53,7 +53,7 @@ class TaskController extends Controller
 
         return ApiResponse::created(
             Message::TASK_CREATED,
-            TaskResource::make($task, created: true)
+            TaskResource::created($task)
         );
     }
 
@@ -67,7 +67,8 @@ class TaskController extends Controller
             'parent',
             'activity' => fn($query) => $query->with('user')->latest()->limit(10),
         ])->loadCount('subtasks');
-        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
+
+        return ApiResponse::ok(data: TaskResource::detailed($task));
     }
 
     public function update(
@@ -87,7 +88,7 @@ class TaskController extends Controller
             'activity' => fn($query) => $query->with('user')->latest()->limit(10),
         ])->loadCount('subtasks');
         return ApiResponse::ok(
-            data: TaskResource::make($task, detailed: true)
+            data: TaskResource::detailed($task)
         );
     }
 
@@ -117,7 +118,7 @@ class TaskController extends Controller
                 'parent',
                 'activity' => fn($query) => $query->with('user')->latest()->limit(10),
             ])->loadCount('subtasks');
-        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
+        return ApiResponse::ok(data: TaskResource::detailed($task));
     }
 
     public function updateAssignee(
@@ -137,7 +138,7 @@ class TaskController extends Controller
             'parent',
             'activity' => fn($query) => $query->with('user')->latest()->limit(10),
         ])->loadCount('subtasks');
-        return ApiResponse::ok(data: TaskResource::make($task, detailed: true));
+        return ApiResponse::ok(data: TaskResource::detailed($task));
     }
 
     public function updatePriority(
@@ -159,7 +160,7 @@ class TaskController extends Controller
                 'activity' => fn($query) => $query->with('user')->latest()->limit(10),
             ])->loadCount('subtasks');
         return ApiResponse::ok(
-            data: TaskResource::make($task, detailed: true));
+            data: TaskResource::detailed($task));
     }
 
     public function indexSubtask(
@@ -193,7 +194,7 @@ class TaskController extends Controller
             ]);
 
         return ApiResponse::created(
-            data: TaskResource::make($task, created: true));
+            data: TaskResource::created($task));
     }
 
     public function updateBulkStatus(

@@ -2,25 +2,15 @@
 
 namespace App\Http\Resources\V1\Task;
 
+use App\Http\Resources\V1\BaseResource;
 use App\Models\V1\Task;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin Task
  */
-class TaskResource extends JsonResource
+class TaskResource extends BaseResource
 {
-
-    public function __construct(
-        $resource,
-        private readonly bool $detailed = false,
-        private readonly bool $created = false
-    )
-    {
-        parent::__construct($resource);
-    }
-
     /**
      * Transform the resource into an array.
      *
