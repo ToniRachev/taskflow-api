@@ -152,7 +152,7 @@ describe('observer — task updated', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
         $this->assertDatabaseHas('activity_logs', [
@@ -168,7 +168,7 @@ describe('observer — task updated', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
         $log = ActivityLog::where('event', 'updated')
@@ -187,7 +187,7 @@ describe('observer — task updated', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
         $log = ActivityLog::where('event', 'updated')
@@ -211,7 +211,7 @@ describe('observer — task updated', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK_STATUS,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['status' => 'in_progress']);
 
         $this->assertDatabaseHas('activity_logs', [
@@ -226,7 +226,7 @@ describe('observer — task updated', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK_STATUS,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['status' => 'done']);
 
         $log = ActivityLog::where('loggable_id', $this->task->id)
@@ -247,7 +247,7 @@ describe('observer — task deleted', function () {
 
         $this->deleteJson(route(
             Routes::DESTROY_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ));
 
         $this->assertDatabaseHas('activity_logs', [
@@ -263,7 +263,7 @@ describe('observer — task deleted', function () {
 
         $this->deleteJson(route(
             Routes::DESTROY_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ));
 
         $log = ActivityLog::where('event', 'deleted')
@@ -281,7 +281,7 @@ describe('observer — task deleted', function () {
 
         $this->deleteJson(route(
             Routes::DESTROY_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ));
 
         $log = ActivityLog::where('event', 'deleted')
@@ -310,7 +310,7 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -326,17 +326,17 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $this->patchJson(route(
             Routes::UPDATE_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['title' => 'First update']);
 
         $this->patchJson(route(
             Routes::UPDATE_TASK,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ), ['title' => 'Second update']);
 
         $response = $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertOk();
 
         $items = $response->json('data.items');
@@ -351,7 +351,7 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertOk();
     });
 
@@ -365,7 +365,7 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertOk();
     });
 
@@ -374,7 +374,7 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $response = $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertOk();
 
         $response->assertJsonStructure([
@@ -391,7 +391,7 @@ describe('GET /tasks/{task}/activity — index', function () {
 
         $this->getJson(route(
             Routes::INDEX_TASK_ACTIVITY,
-            [$this->project->uuid, $this->task->uuid]
+            [$this->task->uuid]
         ))->assertForbidden();
     });
 
