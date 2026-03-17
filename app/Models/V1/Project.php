@@ -4,13 +4,16 @@ namespace App\Models\V1;
 
 use App\Enums\V1\ProjectStatusEnum;
 use App\Enums\V1\ProjectVisibilityEnum;
+use App\Observers\V1\ProjectObserver;
 use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([ProjectObserver::class])]
 class Project extends Model
 {
     use HasUuid, HasFactory, SoftDeletes;
@@ -56,5 +59,10 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function boards(): HasMany
+    {
+        return $this->hasMany(Board::class);
     }
 }

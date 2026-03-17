@@ -24,6 +24,7 @@ class Task extends Model
 
     protected $fillable = [
         'project_id',
+        'column_id',
         'assignee_id',
         'reporter_id',
         'parent_id',
@@ -101,6 +102,11 @@ class Task extends Model
     public function subtasks(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
+    }
+
+    public function column():BelongsTo
+    {
+        return $this->belongsTo(Column::class);
     }
 
     public function activity(): MorphMany
