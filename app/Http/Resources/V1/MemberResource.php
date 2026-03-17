@@ -21,7 +21,7 @@ class MemberResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'status' => $this->status,
-            'avatarUrl' => $this->whenLoaded('profile',
+            'avatarUrl' => $this->whenLoaded('profile', fn() =>
                 $this->profile->avatar_url
                     ? asset('/storage' . '/' . $this->profile->avatar_url)
                     : null),

@@ -35,7 +35,8 @@ class OrganizationController extends Controller
     public function members(Organization $organization): JsonResponse
     {
         $this->authorize('view', $organization);
-        return ApiResponse::ok(data: MemberResource::collection($organization->members));
+        $members = $organization->members()->with('profile')->latest()->paginate(15);
+        return ApiResponse::withPagination($members, MemberResource::class);
     }
 
     public function index(Request $request): JsonResponse
