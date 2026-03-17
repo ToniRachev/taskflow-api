@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\V1\Task;
 
+use App\Enums\V1\TaskStatusEnum;
 use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
-class UpdateTaskAssigneeRequest extends BaseFormRequest
+class TaskStatusUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +25,7 @@ class UpdateTaskAssigneeRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'assignee_id' => ['nullable', 'exists:users,uuid']
+            'status' => ['required', new Enum(TaskStatusEnum::class)]
         ];
     }
 }

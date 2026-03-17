@@ -24,7 +24,7 @@ describe('profile', function () {
     });
 
     it('update profile', function ($field, $value, $dbField = null) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PROFILE), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_UPDATE), [
             $field => $value
         ])
             ->assertStatus(200)
@@ -42,7 +42,7 @@ describe('profile', function () {
         ]);
 
     it('fails to update profile with invalid data', function ($field, $value, $dbField = null) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PROFILE), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_UPDATE), [
             $field => $value
         ])
             ->assertStatus(422);
@@ -54,7 +54,7 @@ describe('profile', function () {
         ]);
 
     it('updates preferences', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_PREFERENCES_UPDATE), [
             $field => $value
         ])
             ->assertStatus(200)
@@ -68,7 +68,7 @@ describe('profile', function () {
         ]);
 
     it('fails for invalid preferences', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_PREFERENCES_UPDATE), [
             $field => $value
         ])
             ->assertStatus(422);
@@ -79,7 +79,7 @@ describe('profile', function () {
         ]);
 
     it('updates notifications', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_PREFERENCES_UPDATE), [
             'notifications' => [
                 $field => $value
             ]
@@ -94,7 +94,7 @@ describe('profile', function () {
         ]);
 
     it('fails on invalid notification data', function ($field, $value) {
-        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::UPDATE_PREFERENCES), [
+        $this->withToken($this->token)->patchJson(route(\App\Constants\Routes::PROFILE_PREFERENCES_UPDATE), [
             'notifications' => [
                 $field => $value
             ]
@@ -111,7 +111,7 @@ describe('profile', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg');
 
-        $this->withToken($this->token)->post(route(\App\Constants\Routes::STORE_AVATAR), [
+        $this->withToken($this->token)->post(route(\App\Constants\Routes::PROFILE_AVATAR_STORE), [
             'avatar' => $file
         ])
             ->assertStatus(200)
@@ -124,21 +124,21 @@ describe('profile', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg')->store('avatars', 'public');
         $this->user->profile->forceFill(['avatar_url' => $file])->save();
-        $this->withToken($this->token)->deleteJson(route(\App\Constants\Routes::STORE_AVATAR))
+        $this->withToken($this->token)->deleteJson(route(\App\Constants\Routes::PROFILE_AVATAR_STORE))
             ->assertStatus(204);
         Storage::disk('public')->assertMissing($file);
         $this->assertDatabaseHas('profiles', ['user_id' => $this->user->id, 'avatar_url' => null]);
     });
 
     it('fails to upload avatar when no file provided', function () {
-        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::STORE_AVATAR))
+        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::PROFILE_AVATAR_STORE))
             ->assertStatus(422);
     });
 
     it('fails to upload avatar when invalid file provided', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('invalid.txt');
-        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::STORE_AVATAR), [
+        $this->withToken($this->token)->postJson(route(\App\Constants\Routes::PROFILE_AVATAR_STORE), [
             'avatar' => $file
         ])
             ->assertStatus(422);

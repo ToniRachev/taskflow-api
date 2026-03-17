@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Organization;
 
 use App\Http\Requests\V1\BaseFormRequest;
 
-class UpdateOrganizationRequest extends BaseFormRequest
+class OrganizationStoreRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class UpdateOrganizationRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['sometimes', 'string', 'max:255'],
-            'logo' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
+            'name' => ['required', 'string', 'max:255'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
         ];
     }
 }

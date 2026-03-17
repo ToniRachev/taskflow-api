@@ -15,7 +15,7 @@ describe('create organization', function () {
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg');
 
         $this->actingAs($this->user);
-        $response = $this->post(route(\App\Constants\Routes::STORE_ORGANIZATION), [
+        $response = $this->post(route(\App\Constants\Routes::ORGANIZATION_STORE), [
             'name' => 'acme org',
             'logo' => $file,
         ])
@@ -41,7 +41,7 @@ describe('create organization', function () {
 
     it('sets the creating org user as a owner', function () {
         $this->actingAs($this->user);
-        $response = $this->post(route(\App\Constants\Routes::STORE_ORGANIZATION), [
+        $response = $this->post(route(\App\Constants\Routes::ORGANIZATION_STORE), [
             'name' => 'acme org',
         ]);
 
@@ -52,7 +52,7 @@ describe('create organization', function () {
     });
 
     it('fails if no authorized', function () {
-        $this->postJson(route(\App\Constants\Routes::STORE_ORGANIZATION), [
+        $this->postJson(route(\App\Constants\Routes::ORGANIZATION_STORE), [
             'name' => 'acme org',
         ])->assertStatus(401);
     });
@@ -62,7 +62,7 @@ describe('create organization', function () {
         Storage::fake('public');
         $file = \Illuminate\Http\UploadedFile::fake()->create('avatar.jpg');
 
-        $this->post(route(\App\Constants\Routes::STORE_ORGANIZATION), [
+        $this->post(route(\App\Constants\Routes::ORGANIZATION_STORE), [
             'logo' => $file,
         ])
             ->assertStatus(422);
@@ -78,13 +78,13 @@ describe('fetch organizations', function () {
             ]);
         });
 
-        $this->getJson(route(\App\Constants\Routes::GET_USER_ORGANIZATIONS))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_INDEX))
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     });
 
     it('unauthenticated fails to get user organizations', function () {
-        $this->getJson(route(\App\Constants\Routes::GET_USER_ORGANIZATIONS))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_INDEX))
             ->assertStatus(401);
     });
 
@@ -96,7 +96,7 @@ describe('fetch organizations', function () {
             'role' => \App\Enums\V1\MembershipRoleEnum::MEMBER->value,
         ]);
 
-        $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_DETAILS, $organization->uuid))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_SHOW, $organization->uuid))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'success',
@@ -124,7 +124,7 @@ describe('fetch organizations', function () {
             'role' => \App\Enums\V1\MembershipRoleEnum::MEMBER->value,
         ]);
 
-        $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_DETAILS, $organization->uuid))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_SHOW, $organization->uuid))
             ->assertStatus(403);
     });
 
@@ -136,7 +136,7 @@ describe('fetch organizations', function () {
             'role' => \App\Enums\V1\MembershipRoleEnum::MEMBER->value,
         ]);
 
-        $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_MEMBERS, $organization->uuid))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_MEMBERS_INDEX, $organization->uuid))
             ->assertStatus(200)
             ->assertJsonCount(1, 'data');
     });
@@ -145,7 +145,7 @@ describe('fetch organizations', function () {
         $organization = \App\Models\V1\Organization::factory()->create();
         $this->actingAs($this->user);
 
-        $this->getJson(route(\App\Constants\Routes::GET_ORGANIZATION_MEMBERS, $organization->uuid))
+        $this->getJson(route(\App\Constants\Routes::ORGANIZATION_MEMBERS_INDEX, $organization->uuid))
             ->assertStatus(403);
     });
 });
@@ -159,7 +159,7 @@ describe('updates org', function () {
             'role' => \App\Enums\V1\MembershipRoleEnum::OWNER->value,
         ]);
 
-        $this->patch(route(\App\Constants\Routes::UPDATE_ORGANIZATION, $organization->uuid), [
+        $this->patch(route(\App\Constants\Routes::ORGANIZATION_UPDATE, $organization->uuid), [
             'name' => 'updated org name'
         ])
             ->assertStatus(200)
@@ -170,7 +170,7 @@ describe('updates org', function () {
         $this->actingAs($this->user);
         $organization = \App\Models\V1\Organization::factory()->create();
 
-        $this->patch(route(\App\Constants\Routes::UPDATE_ORGANIZATION, $organization->uuid), [
+        $this->patch(route(\App\Constants\Routes::ORGANIZATION_UPDATE, $organization->uuid), [
             'name' => 'updated name'
         ])
             ->assertStatus(403);
@@ -187,7 +187,7 @@ describe('delete organization', function () {
         ]);
 
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_ORGANIZATION, $organization->uuid))
+        $this->deleteJson(route(\App\Constants\Routes::ORGANIZATION_DESTROY, $organization->uuid))
             ->assertStatus(204);
 
         $this->assertSoftDeleted('organizations', [
@@ -204,7 +204,7 @@ describe('delete organization', function () {
         ]);
 
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_ORGANIZATION, $organization->uuid))
+        $this->deleteJson(route(\App\Constants\Routes::ORGANIZATION_DESTROY, $organization->uuid))
             ->assertStatus(403);
     });
 });

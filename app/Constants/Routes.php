@@ -15,45 +15,58 @@ class Routes
     //---Profile----------------
 
     public const GET_PROFILE = 'profile.show';
-    public const UPDATE_PROFILE = 'profile.update';
-    public const UPDATE_PREFERENCES = 'profile.preferences.update';
-    public const STORE_AVATAR = 'profile.avatar.store';
-    public const DESTROY_AVATAR = 'profile.avatar.destroy';
+    public const PROFILE_UPDATE = 'profile.update';
+    public const PROFILE_PREFERENCES_UPDATE = 'profile.preferences.update';
+    public const PROFILE_AVATAR_STORE = 'profile.avatar.store';
+    public const PROFILE_AVATAR_DESTROY = 'profile.avatar.destroy';
 
     //---Organization----------------
 
-    public const STORE_ORGANIZATION = 'organizations.store';
-    public const GET_USER_ORGANIZATIONS = 'organizations.index';
-    public const GET_ORGANIZATION_DETAILS = 'organizations.show';
-    public const UPDATE_ORGANIZATION = 'organizations.update';
-    public const DESTROY_ORGANIZATION = 'organizations.destroy';
-    public const GET_ORGANIZATION_MEMBERS = 'organizations.members.index';
-    public const UPDATE_ORGANIZATION_MEMBER_ROLE = 'organizations.members.update';
-    public const DESTROY_ORGANIZATION_MEMBER = 'organizations.members.destroy';
-    public const LEAVE_ORGANIZATION = 'organizations.leave';
-    public const TRANSFER_ORGANIZATION_OWNERSHIP = 'organizations.transfer-ownership';
+    public const ORGANIZATION_STORE = 'organizations.store';
+    public const ORGANIZATION_INDEX = 'organizations.index';
+    public const ORGANIZATION_SHOW = 'organizations.show';
+    public const ORGANIZATION_UPDATE = 'organizations.update';
+    public const ORGANIZATION_DESTROY = 'organizations.destroy';
+    public const ORGANIZATION_MEMBERS_INDEX = 'organizations.members.index';
+    public const ORGANIZATION_MEMBERS_UPDATE = 'organizations.members.update';
+    public const ORGANIZATION_MEMBERS_DESTROY = 'organizations.members.destroy';
+    public const ORGANIZATION_LEAVE = 'organizations.leave';
+    public const ORGANIZATION_TRANSFER_OWNERSHIP = 'organizations.transfer-ownership';
 
     //---Project----------------
 
-    public const STORE_PROJECT = 'projects.store';
-    public const INDEX_PROJECT = 'projects.index';
-    public const SHOW_PROJECT = 'projects.show';
-    public const UPDATE_PROJECT = 'projects.update';
-    public const DESTROY_PROJECT = 'projects.destroy';
-    public const ARCHIVE_PROJECT = 'projects.archive';
+    public const PROJECT_STORE = 'projects.store';
+    public const PROJECT_INDEX = 'projects.index';
+    public const PROJECT_SHOW = 'projects.show';
+    public const PROJECT_UPDATE = 'projects.update';
+    public const PROJECT_DESTROY = 'projects.destroy';
+    public const PROJECT_ARCHIVE = 'projects.archive';
 
     //---Tasks----------------
-    public const STORE_TASK = 'tasks.store';
-    public const INDEX_TASK = 'tasks.index';
-    public const SHOW_TASK = 'tasks.show';
-    public const UPDATE_TASK = 'tasks.update';
-    public const DESTROY_TASK = 'tasks.destroy';
-    public const UPDATE_TASK_STATUS = 'tasks.status.update';
-    public const UPDATE_TASK_ASSIGNEE = 'tasks.assignee.update';
-    public const UPDATE_TASK_PRIORITY = 'tasks.priority.update';
-    public const STORE_SUBTASK = 'tasks.subtasks.store';
-    public const INDEX_SUBTASK = 'tasks.subtasks.index';
-    public const INDEX_TASK_ACTIVITY = 'tasks.activity.index';
-    public const BULK_UPDATE_TASK_STATUS = 'tasks.status.bulk';
-    public const SEARCH_TASK = 'tasks.search';
+    public const TASK_STORE = 'tasks.store';
+    public const TASK_INDEX = 'tasks.index';
+    public const TASK_SHOW = 'tasks.show';
+    public const TASK_UPDATE = 'tasks.update';
+    public const TASK_DESTROY = 'tasks.destroy';
+    public const TASK_STATUS_UPDATE = 'tasks.status.update';
+    public const TASK_ASSIGNEE_UPDATE = 'tasks.assignee.update';
+    public const TASK_PRIORITY_UPDATE = 'tasks.priority.update';
+    public const TASK_SUBTASKS_STORE = 'tasks.subtasks.store';
+    public const TASK_SUBTASKS_INDEX = 'tasks.subtasks.index';
+    public const TASK_ACTIVITY_INDEX = 'tasks.activity.index';
+    public const TASK_STATUS_BULK = 'tasks.status.bulk';
+    public const TASK_COLUMN_MOVE = 'tasks.column.move';
+
+    //---Boards----------------------
+    public const BOARD_INDEX = 'boards.index';
+    public const BOARD_STORE = 'boards.store';
+    public const BOARD_SHOW = 'boards.show';
+    public const BOARD_UPDATE = 'boards.update';
+    public const BOARD_DESTROY = 'boards.destroy';
+
+    //---Columns-----------------------
+    public const COLUMN_STORE = 'columns.store';
+    public const COLUMN_UPDATE = 'columns.update';
+    public const COLUMN_REORDER = 'columns.reorder';
+    public const COLUMN_DESTROY = 'columns.destroy';
 }

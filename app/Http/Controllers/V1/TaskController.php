@@ -5,12 +5,12 @@ namespace App\Http\Controllers\V1;
 use App\Constants\Message;
 use App\Filters\V1\TaskFilter;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Task\StoreTaskRequest;
-use App\Http\Requests\V1\Task\UpdateTaskAssigneeRequest;
-use App\Http\Requests\V1\Task\UpdateTaskBulkStatusRequest;
-use App\Http\Requests\V1\Task\UpdateTaskPriorityRequest;
-use App\Http\Requests\V1\Task\UpdateTaskRequest;
-use App\Http\Requests\V1\Task\UpdateTaskStatusRequest;
+use App\Http\Requests\V1\Task\TaskStoreRequest;
+use App\Http\Requests\V1\Task\TaskAssigneeUpdateRequest;
+use App\Http\Requests\V1\Task\TaskBulkStatusUpdateRequest;
+use App\Http\Requests\V1\Task\TaskPriorityUpdateRequest;
+use App\Http\Requests\V1\Task\TaskUpdateRequest;
+use App\Http\Requests\V1\Task\TaskStatusUpdateRequest;
 use App\Http\Resources\V1\TaskActivityResource;
 use App\Http\Resources\V1\TaskResource;
 use App\Http\Responses\V1\ApiResponse;
@@ -37,7 +37,7 @@ class TaskController extends Controller
         return ApiResponse::withPagination($tasks, TaskResource::class);
     }
 
-    public function store(Project $project, StoreTaskRequest $request)
+    public function store(Project $project, TaskStoreRequest $request)
     {
         $this->authorize('create', [Task::class, $project]);
 
@@ -73,7 +73,7 @@ class TaskController extends Controller
 
     public function update(
         Task              $task,
-        UpdateTaskRequest $request
+        TaskUpdateRequest $request
     )
     {
         $this->authorize('update', [$task]);
@@ -103,7 +103,7 @@ class TaskController extends Controller
 
     public function updateStatus(
         Task                    $task,
-        UpdateTaskStatusRequest $request
+        TaskStatusUpdateRequest $request
     )
     {
         $this->authorize('update', [$task]);
@@ -123,7 +123,7 @@ class TaskController extends Controller
 
     public function updateAssignee(
         Task                      $task,
-        UpdateTaskAssigneeRequest $request
+        TaskAssigneeUpdateRequest $request
     )
     {
         $this->authorize('assign', [$task]);
@@ -143,7 +143,7 @@ class TaskController extends Controller
 
     public function updatePriority(
         Task                      $task,
-        UpdateTaskPriorityRequest $request
+        TaskPriorityUpdateRequest $request
     )
     {
 
@@ -178,7 +178,7 @@ class TaskController extends Controller
 
     public function storeSubtask(
         Task             $task,
-        StoreTaskRequest $request
+        TaskStoreRequest $request
     )
     {
         $this->authorize('createSubtask', [$task]);
@@ -199,7 +199,7 @@ class TaskController extends Controller
 
     public function updateBulkStatus(
         Project                     $project,
-        UpdateTaskBulkStatusRequest $request
+        TaskBulkStatusUpdateRequest $request
     )
     {
         $this->authorize('updateBulkStatus', [Task::class, $project]);

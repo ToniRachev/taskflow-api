@@ -67,7 +67,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertCreated();
 
@@ -82,7 +82,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)
             ->assertJsonPath('data.reference', 'TEST-2'); // task fixture already used TEST-1
@@ -92,12 +92,12 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $first = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->json('data.reference');
 
         $second = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->json('data.reference');
 
@@ -109,7 +109,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), [...$this->payload, 'assigneeId' => $this->assignee->uuid])
             ->assertCreated();
@@ -124,7 +124,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertCreated();
 
@@ -135,7 +135,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->outsider);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertForbidden();
     });
@@ -144,14 +144,14 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->viewer);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertForbidden();
     });
 
     it('fails if unauthenticated', function () {
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertUnauthorized();
     });
@@ -160,7 +160,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), [...$this->payload, 'title' => ''])->assertUnprocessable();
     });
@@ -169,7 +169,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), [...$this->payload, 'type' => 'invalid'])->assertUnprocessable();
     });
@@ -178,7 +178,7 @@ describe('POST /tasks — store', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), [...$this->payload, 'assigneeId' => fake()->uuid()])->assertUnprocessable();
     });
@@ -192,7 +192,7 @@ describe('GET /tasks — index', function () {
         $this->actingAs($this->user);
 
         $this->getJson(route(
-            Routes::INDEX_TASK,
+            Routes::TASK_INDEX,
             [$this->project->uuid]
         ))->assertOk()->assertJsonStructure([
             'success',
@@ -216,7 +216,7 @@ describe('GET /tasks — index', function () {
         ]);
 
         $response = $this->getJson(route(
-                Routes::INDEX_TASK,
+                Routes::TASK_INDEX,
                 [$this->project->uuid]
             ) . '?status=done')->assertOk();
 
@@ -229,7 +229,7 @@ describe('GET /tasks — index', function () {
         $this->actingAs($this->user);
 
         $response = $this->getJson(route(
-                Routes::INDEX_TASK,
+                Routes::TASK_INDEX,
                 [$this->project->uuid]
             ) . '?priority=medium')->assertOk();
 
@@ -242,7 +242,7 @@ describe('GET /tasks — index', function () {
         $this->actingAs($this->user);
 
         $response = $this->getJson(route(
-                Routes::INDEX_TASK,
+                Routes::TASK_INDEX,
                 [$this->project->uuid]
             ) . '?assignee=' . $this->assignee->uuid)->assertOk();
 
@@ -253,7 +253,7 @@ describe('GET /tasks — index', function () {
 
     it('fails if unauthenticated', function () {
         $this->getJson(route(
-            Routes::INDEX_TASK,
+            Routes::TASK_INDEX,
             [$this->project->uuid]
         ))->assertUnauthorized();
     });
@@ -262,7 +262,7 @@ describe('GET /tasks — index', function () {
         $this->actingAs($this->outsider);
 
         $this->getJson(route(
-            Routes::INDEX_TASK,
+            Routes::TASK_INDEX,
             [$this->project->uuid]
         ))->assertForbidden();
     });
@@ -276,7 +276,7 @@ describe('GET /tasks/{task} — show', function () {
         $this->actingAs($this->user);
 
         $this->getJson(route(
-            Routes::SHOW_TASK,
+            Routes::TASK_SHOW,
             [$this->task->uuid]
         ))->assertOk()->assertJsonStructure([
             'data' => [
@@ -291,7 +291,7 @@ describe('GET /tasks/{task} — show', function () {
         $this->actingAs($this->viewer);
 
         $this->getJson(route(
-            Routes::SHOW_TASK,
+            Routes::TASK_SHOW,
             [$this->task->uuid]
         ))->assertOk();
     });
@@ -300,14 +300,14 @@ describe('GET /tasks/{task} — show', function () {
         $this->actingAs($this->outsider);
 
         $this->getJson(route(
-            Routes::SHOW_TASK,
+            Routes::TASK_SHOW,
             [$this->task->uuid]
         ))->assertForbidden();
     });
 
     it('fails if unauthenticated', function () {
         $this->getJson(route(
-            Routes::SHOW_TASK,
+            Routes::TASK_SHOW,
             [$this->task->uuid]
         ))->assertUnauthorized();
     });
@@ -316,7 +316,7 @@ describe('GET /tasks/{task} — show', function () {
         $this->actingAs($this->user);
 
         $this->getJson(route(
-            Routes::SHOW_TASK,
+            Routes::TASK_SHOW,
             [fake()->uuid()]
         ))->assertNotFound();
     });
@@ -330,7 +330,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Updated title'])->assertOk();
 
@@ -344,7 +344,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($this->assignee);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Assignee updated'])->assertOk();
     });
@@ -353,7 +353,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($this->viewer);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Viewer update'])->assertForbidden();
     });
@@ -368,7 +368,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($member);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Should fail'])->assertForbidden();
     });
@@ -377,7 +377,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => ''])->assertUnprocessable();
     });
@@ -386,7 +386,7 @@ describe('PATCH /tasks/{task} — update', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['dueDate' => null])->assertOk();
 
@@ -398,7 +398,7 @@ describe('PATCH /tasks/{task} — update', function () {
 
     it('fails if unauthenticated', function () {
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Unauthorized'])->assertUnauthorized();
     });
@@ -412,7 +412,7 @@ describe('DELETE /tasks/{task} — destroy', function () {
         $this->actingAs($this->user);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ))->assertNoContent();
 
@@ -423,7 +423,7 @@ describe('DELETE /tasks/{task} — destroy', function () {
         $this->actingAs($this->viewer);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ))->assertForbidden();
     });
@@ -432,14 +432,14 @@ describe('DELETE /tasks/{task} — destroy', function () {
         $this->actingAs($this->assignee); // assignee but not reporter
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ))->assertForbidden();
     });
 
     it('fails if unauthenticated', function () {
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ))->assertUnauthorized();
     });
@@ -453,7 +453,7 @@ describe('PATCH /tasks/{task}/status — update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'in_progress'])->assertOk();
 
@@ -467,7 +467,7 @@ describe('PATCH /tasks/{task}/status — update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'done'])->assertOk();
 
@@ -480,7 +480,7 @@ describe('PATCH /tasks/{task}/status — update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'in_progress'])->assertOk();
 
@@ -492,7 +492,7 @@ describe('PATCH /tasks/{task}/status — update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'invalid'])->assertUnprocessable();
     });
@@ -501,7 +501,7 @@ describe('PATCH /tasks/{task}/status — update status', function () {
         $this->actingAs($this->viewer);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'in_progress'])->assertForbidden();
     });
@@ -521,7 +521,7 @@ describe('PATCH /tasks/{task}/assign — update assignee', function () {
         ]);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_ASSIGNEE,
+            Routes::TASK_ASSIGNEE_UPDATE,
             [$this->task->uuid]
         ), ['assigneeId' => $newAssignee->uuid])->assertOk();
 
@@ -535,7 +535,7 @@ describe('PATCH /tasks/{task}/assign — update assignee', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_ASSIGNEE,
+            Routes::TASK_ASSIGNEE_UPDATE,
             [$this->task->uuid]
         ), ['assigneeId' => null])->assertOk();
 
@@ -549,7 +549,7 @@ describe('PATCH /tasks/{task}/assign — update assignee', function () {
         $this->actingAs($this->assignee);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_ASSIGNEE,
+            Routes::TASK_ASSIGNEE_UPDATE,
             [$this->task->uuid]
         ), ['assigneeId' => $this->user->uuid])->assertForbidden();
     });
@@ -558,7 +558,7 @@ describe('PATCH /tasks/{task}/assign — update assignee', function () {
         $this->actingAs($this->viewer);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_ASSIGNEE,
+            Routes::TASK_ASSIGNEE_UPDATE,
             [$this->task->uuid]
         ), ['assigneeId' => $this->assignee->uuid])->assertForbidden();
     });
@@ -567,7 +567,7 @@ describe('PATCH /tasks/{task}/assign — update assignee', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_ASSIGNEE,
+            Routes::TASK_ASSIGNEE_UPDATE,
             [$this->task->uuid]
         ), ['assigneeId' => fake()->uuid()])->assertUnprocessable();
     });
@@ -581,7 +581,7 @@ describe('PATCH /tasks/{task}/priority — update priority', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_PRIORITY,
+            Routes::TASK_PRIORITY_UPDATE,
             [$this->task->uuid]
         ), ['priority' => 'high'])->assertOk();
 
@@ -595,7 +595,7 @@ describe('PATCH /tasks/{task}/priority — update priority', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_PRIORITY,
+            Routes::TASK_PRIORITY_UPDATE,
             [$this->task->uuid]
         ), ['priority' => 'urgent'])->assertUnprocessable();
     });
@@ -604,7 +604,7 @@ describe('PATCH /tasks/{task}/priority — update priority', function () {
         $this->actingAs($this->viewer);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_PRIORITY,
+            Routes::TASK_PRIORITY_UPDATE,
             [$this->task->uuid]
         ), ['priority' => 'high'])->assertForbidden();
     });
@@ -618,7 +618,7 @@ describe('POST /tasks/{task}/subtasks — store subtask', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_SUBTASK,
+            Routes::TASK_SUBTASKS_STORE,
             [$this->task->uuid]
         ), $this->payload)->assertCreated();
 
@@ -632,7 +632,7 @@ describe('POST /tasks/{task}/subtasks — store subtask', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_SUBTASK,
+            Routes::TASK_SUBTASKS_STORE,
             [$this->task->uuid]
         ), $this->payload)->assertCreated();
 
@@ -643,7 +643,7 @@ describe('POST /tasks/{task}/subtasks — store subtask', function () {
         $this->actingAs($this->viewer);
 
         $this->postJson(route(
-            Routes::STORE_SUBTASK,
+            Routes::TASK_SUBTASKS_STORE,
             [$this->task->uuid]
         ), $this->payload)->assertForbidden();
     });
@@ -663,7 +663,7 @@ describe('GET /tasks/{task}/subtasks — index subtasks', function () {
         $this->actingAs($this->user);
 
         $response = $this->getJson(route(
-            Routes::INDEX_SUBTASK,
+            Routes::TASK_SUBTASKS_INDEX,
             [$this->task->uuid]
         ))->assertOk();
 
@@ -674,7 +674,7 @@ describe('GET /tasks/{task}/subtasks — index subtasks', function () {
         $this->actingAs($this->user);
 
         $response = $this->getJson(route(
-            Routes::INDEX_SUBTASK,
+            Routes::TASK_SUBTASKS_INDEX,
             [$this->task->uuid]
         ))->assertOk();
 
@@ -683,7 +683,7 @@ describe('GET /tasks/{task}/subtasks — index subtasks', function () {
 
     it('fails if unauthenticated', function () {
         $this->getJson(route(
-            Routes::INDEX_SUBTASK,
+            Routes::TASK_SUBTASKS_INDEX,
             [$this->task->uuid]
         ))->assertUnauthorized();
     });
@@ -705,7 +705,7 @@ describe('PATCH /tasks/bulk-status — bulk update status', function () {
         ]);
 
         $this->patchJson(route(
-            Routes::BULK_UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_BULK,
             [$this->project->uuid]
         ), [
             'taskIds' => [$this->task->uuid, $second->uuid],
@@ -730,7 +730,7 @@ describe('PATCH /tasks/bulk-status — bulk update status', function () {
         ]);
 
         $response = $this->patchJson(route(
-            Routes::BULK_UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_BULK,
             [$this->project->uuid]
         ), [
             'taskIds' => [$this->task->uuid, $otherTask->uuid],
@@ -745,7 +745,7 @@ describe('PATCH /tasks/bulk-status — bulk update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::BULK_UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_BULK,
             [$this->project->uuid]
         ), ['taskIds' => [], 'status' => 'in_progress'])->assertUnprocessable();
     });
@@ -754,7 +754,7 @@ describe('PATCH /tasks/bulk-status — bulk update status', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::BULK_UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_BULK,
             [$this->project->uuid]
         ), ['taskIds' => [$this->task->uuid], 'status' => 'invalid'])->assertUnprocessable();
     });
@@ -763,7 +763,7 @@ describe('PATCH /tasks/bulk-status — bulk update status', function () {
         $this->actingAs($this->viewer);
 
         $this->patchJson(route(
-            Routes::BULK_UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_BULK,
             [$this->project->uuid]
         ), ['taskIds' => [$this->task->uuid], 'status' => 'in_progress'])->assertForbidden();
     });

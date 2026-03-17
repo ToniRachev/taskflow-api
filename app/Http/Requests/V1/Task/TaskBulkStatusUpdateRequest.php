@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Requests\V1\Profile;
+namespace App\Http\Requests\V1\Task;
 
+use App\Enums\V1\TaskStatusEnum;
 use App\Http\Requests\V1\BaseFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
-class UpdateAvatarRequest extends BaseFormRequest
+class TaskBulkStatusUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +25,9 @@ class UpdateAvatarRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
+            'task_ids' => ['required','array', 'min:1'],
+            'task_ids.*' => ['required', 'exists:tasks,uuid'],
+            'status' => ['required', new Enum(TaskStatusEnum::class)],
         ];
     }
 }

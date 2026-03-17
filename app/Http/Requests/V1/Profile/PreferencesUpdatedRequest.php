@@ -8,7 +8,7 @@ use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class UpdatePreferencesRequest extends BaseFormRequest
+class PreferencesUpdatedRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

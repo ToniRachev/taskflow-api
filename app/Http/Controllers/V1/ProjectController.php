@@ -6,8 +6,8 @@ use App\Constants\Message;
 use App\Enums\V1\ProjectStatusEnum;
 use App\Enums\V1\TaskStatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Project\StoreProjectRequest;
-use App\Http\Requests\V1\Project\UpdateProjectRequest;
+use App\Http\Requests\V1\Project\ProjectStoreRequest;
+use App\Http\Requests\V1\Project\ProjectUpdateRequest;
 use App\Http\Resources\V1\ProjectResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Organization;
@@ -33,7 +33,7 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Organization $organization, StoreProjectRequest $request)
+    public function store(Organization $organization, ProjectStoreRequest $request)
     {
         $this->authorize('create', [Project::class, $organization]);
         $project = $this->projectService->createProject(
@@ -69,7 +69,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Project $project, UpdateProjectRequest $request)
+    public function update(Project $project, ProjectUpdateRequest $request)
     {
         $this->authorize('update', $project);
         $this->projectService->updateProject($request->validated(), $project);

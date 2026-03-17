@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Task;
+namespace App\Http\Requests\V1\Organization;
 
-use App\Enums\V1\TaskPriorityEnum;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
+use App\Http\Requests\V1\BaseFormRequest;
 
-class UpdateTaskPriorityRequest extends FormRequest
+class OrganizationUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +22,8 @@ class UpdateTaskPriorityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'priority' => ['required', new Enum(TaskPriorityEnum::class)]
+            'name' => ['sometimes', 'string', 'max:255'],
+            'logo' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
         ];
     }
 }

@@ -18,7 +18,9 @@ class Board extends Model
         'is_default'
     ];
 
-    protected $guarded = [];
+    protected $attributes = [
+        'is_default' => false
+    ];
 
     protected function casts(): array
     {

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Profile\UpdateAvatarRequest;
-use App\Http\Requests\V1\Profile\UpdatePreferencesRequest;
-use App\Http\Requests\V1\Profile\UpdateProfileRequest;
+use App\Http\Requests\V1\Profile\AvatarUpdateRequest;
+use App\Http\Requests\V1\Profile\PreferencesUpdatedRequest;
+use App\Http\Requests\V1\Profile\ProfileUpdateRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Responses\V1\ApiResponse;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ProfileController extends Controller
         return ApiResponse::ok(data: UserResource::make($request->user()->load('profile')));
     }
 
-    public function update(UpdateProfileRequest $request)
+    public function update(ProfileUpdateRequest $request)
     {
         $user = $request->user()->load('profile');
         $user->profile->fill($request->validated());
@@ -29,7 +29,7 @@ class ProfileController extends Controller
         return ApiResponse::ok(data: UserResource::make($user));
     }
 
-    public function updatePreferences(UpdatePreferencesRequest $request)
+    public function updatePreferences(PreferencesUpdatedRequest $request)
     {
         $user = $request->user()->load('profile');
         $user->profile->forceFill([
@@ -38,7 +38,7 @@ class ProfileController extends Controller
         return ApiResponse::ok(data: UserResource::make($user));
     }
 
-    public function updateAvatar(UpdateAvatarRequest $request)
+    public function updateAvatar(AvatarUpdateRequest $request)
     {
         $file = $request->validated('avatar');
         $user = $request->user()->load('profile');

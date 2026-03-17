@@ -19,6 +19,8 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->boolean('is_default')->default(false);
             $table->timestamps();
+
+            $table->unique(['project_id', 'name']);
         });
     }
 

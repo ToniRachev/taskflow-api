@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\V1\Organization;
+namespace App\Http\Requests\V1\Task;
 
 use App\Http\Requests\V1\BaseFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrganizationRequest extends BaseFormRequest
+class TaskAssigneeUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +23,7 @@ class StoreOrganizationRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
+            'assignee_id' => ['nullable', 'exists:users,uuid']
         ];
     }
 }

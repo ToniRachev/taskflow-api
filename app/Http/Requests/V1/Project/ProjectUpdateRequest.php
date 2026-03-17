@@ -6,7 +6,7 @@ use App\Enums\V1\ProjectVisibilityEnum;
 use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateProjectRequest extends BaseFormRequest
+class ProjectUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

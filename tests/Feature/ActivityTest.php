@@ -59,7 +59,7 @@ describe('observer — task created', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload)->assertCreated();
 
@@ -74,7 +74,7 @@ describe('observer — task created', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload);
 
@@ -90,7 +90,7 @@ describe('observer — task created', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload);
 
@@ -107,7 +107,7 @@ describe('observer — task created', function () {
         $this->actingAs($this->user);
 
         $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload);
 
@@ -126,7 +126,7 @@ describe('observer — task created', function () {
         $this->actingAs($this->user);
 
         $response = $this->postJson(route(
-            Routes::STORE_TASK,
+            Routes::TASK_STORE,
             [$this->project->uuid]
         ), $this->payload);
 
@@ -151,7 +151,7 @@ describe('observer — task updated', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
@@ -167,7 +167,7 @@ describe('observer — task updated', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
@@ -186,7 +186,7 @@ describe('observer — task updated', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Updated title']);
 
@@ -210,7 +210,7 @@ describe('observer — task updated', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'in_progress']);
 
@@ -225,7 +225,7 @@ describe('observer — task updated', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK_STATUS,
+            Routes::TASK_STATUS_UPDATE,
             [$this->task->uuid]
         ), ['status' => 'done']);
 
@@ -246,7 +246,7 @@ describe('observer — task deleted', function () {
         $this->actingAs($this->user);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ));
 
@@ -262,7 +262,7 @@ describe('observer — task deleted', function () {
         $this->actingAs($this->user);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ));
 
@@ -280,7 +280,7 @@ describe('observer — task deleted', function () {
         $this->actingAs($this->user);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->task->uuid]
         ));
 
@@ -304,12 +304,12 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->project->uuid, $this->task->uuid]
         ), ['title' => 'Trigger activity']);
 
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertOk()
             ->assertJsonStructure([
@@ -325,17 +325,17 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->user);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'First update']);
 
         $this->patchJson(route(
-            Routes::UPDATE_TASK,
+            Routes::TASK_UPDATE,
             [$this->task->uuid]
         ), ['title' => 'Second update']);
 
         $response = $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertOk();
 
@@ -350,7 +350,7 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->viewer);
 
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertOk();
     });
@@ -359,12 +359,12 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->user);
 
         $this->deleteJson(route(
-            Routes::DESTROY_TASK,
+            Routes::TASK_DESTROY,
             [$this->project->uuid, $this->task->uuid]
         ));
 
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertOk();
     });
@@ -373,7 +373,7 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->user);
 
         $response = $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertOk();
 
@@ -390,14 +390,14 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->outsider);
 
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->task->uuid]
         ))->assertForbidden();
     });
 
     it('fails if unauthenticated', function () {
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->project->uuid, $this->task->uuid]
         ))->assertUnauthorized();
     });
@@ -406,7 +406,7 @@ describe('GET /tasks/{task}/activity — index', function () {
         $this->actingAs($this->user);
 
         $this->getJson(route(
-            Routes::INDEX_TASK_ACTIVITY,
+            Routes::TASK_ACTIVITY_INDEX,
             [$this->project->uuid, fake()->uuid()]
         ))->assertNotFound();
     });

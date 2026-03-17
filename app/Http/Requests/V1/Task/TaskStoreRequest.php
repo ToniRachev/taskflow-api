@@ -8,7 +8,7 @@ use App\Enums\V1\TaskTypeEnum;
 use App\Http\Requests\V1\BaseFormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreTaskRequest extends BaseFormRequest
+class TaskStoreRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -30,7 +30,7 @@ describe('creates a project', function () {
         ]);
 
         $this->actingAs($this->user);
-        $response = $this->postJson(route(\App\Constants\Routes::STORE_PROJECT, $this->organization->uuid), $this->payload)
+        $response = $this->postJson(route(\App\Constants\Routes::PROJECT_STORE, $this->organization->uuid), $this->payload)
             ->assertStatus(201)
             ->assertJsonStructure([
                 'success',
@@ -63,7 +63,7 @@ describe('creates a project', function () {
 
         $this->actingAs($this->user);
 
-        $this->postJson(route(\App\Constants\Routes::STORE_PROJECT, $this->organization->uuid), $this->payload)
+        $this->postJson(route(\App\Constants\Routes::PROJECT_STORE, $this->organization->uuid), $this->payload)
             ->assertStatus(403);
     });
 });
@@ -81,7 +81,7 @@ describe('updates project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$project->uuid]), [
+        $this->patchJson(route(\App\Constants\Routes::PROJECT_UPDATE, [$project->uuid]), [
             'name' => 'new project name',
         ])
             ->assertStatus(200)
@@ -100,7 +100,7 @@ describe('updates project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->patchJson(route(\App\Constants\Routes::UPDATE_PROJECT, [$project->uuid]), [
+        $this->patchJson(route(\App\Constants\Routes::PROJECT_UPDATE, [$project->uuid]), [
             'name' => 'new project name',
         ])
             ->assertStatus(403);
@@ -120,7 +120,7 @@ describe('deletes project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$project->uuid]))
+        $this->deleteJson(route(\App\Constants\Routes::PROJECT_DESTROY, [$project->uuid]))
             ->assertStatus(204);
 
         $this->assertSoftDeleted('projects', [
@@ -135,7 +135,7 @@ describe('deletes project', function () {
             'organization_id' => $this->organization->id,
         ]);
 
-        $this->deleteJson(route(\App\Constants\Routes::DESTROY_PROJECT, [$project->uuid]))
+        $this->deleteJson(route(\App\Constants\Routes::PROJECT_DESTROY, [$project->uuid]))
             ->assertStatus(403);
 
         $this->assertDatabaseHas('projects', [
