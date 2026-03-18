@@ -14,7 +14,16 @@ class BoardController extends Controller
 {
     public function index(Project $project)
     {
-        return ApiResponse::ok(data: BoardResource::collection($project->boards));
+        $this->authorize('viewAny', [Board::class, $project]);
+        $boards = $project->boards()->withCount('columns')->get();
+        return ApiResponse::ok(data: BoardResource::collection($boards));
+    }
+
+    public function show(Board $board)
+    {
+        $this->authorize('view', $board);
+        $board->load('columns')->get();
+        return ApiResponse::ok(data: BoardResource::detailed($board));
     }
 
     public function store(Project $project, BoardStoreRequest $request)
