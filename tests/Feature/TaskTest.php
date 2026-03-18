@@ -36,7 +36,6 @@ beforeEach(function () {
 
     $this->project = Project::factory()->create([
         'organization_id' => $this->organization->id,
-        'key' => 'TEST',
     ]);
 
     $this->task = Task::factory()->create([
