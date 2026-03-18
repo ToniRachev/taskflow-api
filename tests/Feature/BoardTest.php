@@ -4,6 +4,7 @@ use App\Constants\Routes;
 use App\Enums\V1\MembershipRoleEnum;
 use App\Enums\V1\ProjectStatusEnum;
 use App\Enums\V1\ProjectVisibilityEnum;
+use App\Models\V1\Board;
 use App\Models\V1\Organization;
 use App\Models\V1\Project;
 use App\Models\V1\User;
@@ -18,11 +19,13 @@ beforeEach(function () {
         'role' => MembershipRoleEnum::ADMIN,
         'joined_at' => now(),
     ]);
-
     $this->project = Project::factory()->create(['organization_id' => $this->organization->id]);
+    $this->board = Board::factory()->create(['project_id' => $this->project->id]);
 });
 
-describe('creates a board', function () {
+//---Store---------------------------
+
+describe('Post /boards - store', function () {
     it('creates a default board on project creation', function () {
         $this->actingAs($this->user);
         $response = $this->postJson(route(Routes::PROJECT_STORE, $this->organization->uuid), [
@@ -52,7 +55,8 @@ describe('creates a board', function () {
                     'name',
                     'description',
                     'isDefault',
-                    'createdAt'
+                    'createdAt',
+                    'updatedAt'
                 ]
             ]);
 
@@ -81,5 +85,57 @@ describe('creates a board', function () {
             'name' => 'Test board',
             'description' => 'Test board description'
         ])->assertStatus(403);
+    });
+});
+
+//---Index------------------------------
+
+describe('Get /boards - index', function () {
+    it('index boards', function () {
+        $this->actingAs($this->user);
+        $this->getJson(route(Routes::BOARD_INDEX, $this->project->uuid))
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [[
+                    'id',
+                    'name',
+                    'description',
+                    'isDefault',
+                    'columnsCount',
+                    'createdAt',
+                    'updatedAt',
+                ]]
+            ]);
+    });
+
+    it('show board', function () {
+        $this->actingAs($this->user);
+        $response = $this->getJson(route(Routes::BOARD_SHOW, [$this->board->uuid]))
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'description',
+                    'isDefault',
+                    'columns',
+                    'createdAt',
+                    'updatedAt',
+                ]
+            ]);
+    });
+
+    it('fails to list boards if not organization member', function () {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $this->getJson(route(Routes::BOARD_INDEX, $this->project->uuid))
+            ->assertStatus(403);
+    });
+
+    it('fails view board if not organization member', function () {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $this->getJson(route(Routes::BOARD_SHOW, $this->board->uuid))
+            ->assertStatus(403);
     });
 });
