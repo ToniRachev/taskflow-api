@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Board\BoardStoreRequest;
+use App\Http\Requests\V1\Board\BoardUpdateRequest;
 use App\Http\Resources\V1\BoardResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Board;
@@ -31,5 +32,17 @@ class BoardController extends Controller
         $this->authorize('create', [Board::class, $project]);
         $board = $project->boards()->create($request->validated());
         return ApiResponse::created(data: BoardResource::make($board));
+    }
+
+    public function update(Board $board, BoardUpdateRequest $request)
+    {
+        $this->authorize('update', $board);
+        $board->fill($request->validated());
+
+        if ($board->isDirty()) {
+            $board->save();
+        }
+
+        return ApiResponse::ok(data: BoardResource::make($board));
     }
 }

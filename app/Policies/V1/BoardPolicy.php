@@ -38,7 +38,7 @@ class BoardPolicy
      */
     public function update(User $user, Board $board): bool
     {
-        return false;
+        return $board->project->organization->hasAdminAccess($user);
     }
 
     /**

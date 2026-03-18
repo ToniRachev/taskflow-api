@@ -139,3 +139,66 @@ describe('Get /boards - index', function () {
             ->assertStatus(403);
     });
 });
+
+//---Update----------------------------
+
+describe('Patch /boards - update', function () {
+    it('updates board', function () {
+        $this->actingAs($this->user);
+        $this->patchJson(route(Routes::BOARD_UPDATE, [$this->board->uuid]), [
+            'name' => 'Updated name',
+            'description' => 'Updated description',
+        ])
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'name' => 'Updated name',
+                    'description' => 'Updated description'
+                ]
+            ]);
+    });
+
+    it('fails if empty attributes', function ($field, $value) {
+        $this->actingAs($this->user);
+        $this->patchJson(route(Routes::BOARD_UPDATE, [$this->board->uuid]), [
+            $field => $value,
+        ])->assertStatus(422);
+    })->with([
+        'name' => ['name', ''],
+        'description' => ['description', '']
+    ]);
+
+    it('fails if duplicate name', function () {
+        $this->actingAs($this->user);
+        Board::factory()->create([
+            'name' => 'Updated name',
+            'description' => 'test',
+            'project_id' => $this->project->id
+        ]);
+
+        $this->patchJson(route(Routes::BOARD_UPDATE, [$this->board->uuid]), [
+            'name' => 'Updated name',
+            'description' => 'Updated description',
+        ])
+            ->assertStatus(422);
+    });
+
+    it('fails if not authenticated', function () {
+        $this->patchJson(route(Routes::BOARD_UPDATE, [$this->board->uuid]), [
+            'name' => 'Updated name',
+            'description' => 'Updated description',
+        ])
+            ->assertStatus(401);
+    });
+
+    it('fails if dont has authorization', function () {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->patchJson(route(Routes::BOARD_UPDATE, [$this->board->uuid]), [
+            'name' => 'Updated name',
+            'description' => 'Updated description',
+        ])
+            ->assertStatus(403);
+    });
+});
