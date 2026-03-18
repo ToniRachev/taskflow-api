@@ -23,11 +23,10 @@ class BoardResource extends BaseResource
             'name' => $this->name,
             'description' => $this->description,
             'isDefault' => $this->is_default,
-            'columns' => $this->when(
-                $this->detailed,
-                $this->whenLoaded('columns', ColumnResource::collection($this->columns))),
+            'columnsCount' => $this->whenCounted('columns'),
+            'columns' => $this->whenLoaded('columns', ColumnResource::collection($this->columns)),
             'createdAt' => $this->created_at,
-            'updatedAt' => $this->when($this->detailed, $this->updated_at),
+            'updatedAt' => $this->updated_at,
         ];
     }
 }
