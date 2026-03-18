@@ -3,13 +3,14 @@
 namespace App\Models\V1;
 
 use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Board extends Model
 {
-    use HasUuid;
+    use HasUuid, HasFactory;
 
     protected $fillable = [
         'project_id',
@@ -27,6 +28,11 @@ class Board extends Model
         return [
             'is_default' => 'boolean',
         ];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
     }
 
     public static function defaultInit(bool $isDefault): array
