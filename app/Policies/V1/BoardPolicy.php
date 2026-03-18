@@ -12,9 +12,9 @@ class BoardPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Project $project): bool
     {
-        return false;
+        return $project->organization->isMember($user);
     }
 
     /**
@@ -22,7 +22,7 @@ class BoardPolicy
      */
     public function view(User $user, Board $board): bool
     {
-        return false;
+        return $board->project->organization->isMember($user);
     }
 
     /**
@@ -30,7 +30,7 @@ class BoardPolicy
      */
     public function create(User $user, Project $project): bool
     {
-        return $project->organization->hasAdminAccess($user);
+        return $project->organization->canModify($user);
     }
 
     /**
