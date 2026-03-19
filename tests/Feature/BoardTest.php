@@ -202,3 +202,27 @@ describe('Patch /boards - update', function () {
             ->assertStatus(403);
     });
 });
+
+// Destroy
+
+describe('Delete /boards - destroy', function () {
+    it('successfully deletes board', function () {
+        $this->actingAs($this->user);
+        $this->deleteJson(route(Routes::BOARD_DESTROY, [$this->board->uuid]))
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('boards', ['id' => $this->board->id]);
+    });
+
+    it('fails if unauthorized', function () {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $this->deleteJson(route(Routes::BOARD_DESTROY, [$this->board->uuid]))
+            ->assertStatus(403);
+    });
+
+    it('fails if unauthenticated', function () {
+        $this->deleteJson(route(Routes::BOARD_DESTROY, [$this->board->uuid]))
+            ->assertStatus(401);
+    });
+});

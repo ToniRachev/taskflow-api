@@ -26,6 +26,8 @@ class ColumnResource extends BaseResource
             'wipLimit' => $this->wip_limit,
             'tasksCount' => $this->whenCounted('tasks'),
             'tasks' => $this->whenLoaded('tasks', TaskResource::collection($this->tasks)),
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }

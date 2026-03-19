@@ -9,7 +9,6 @@ use App\Http\Resources\V1\BoardResource;
 use App\Http\Responses\V1\ApiResponse;
 use App\Models\V1\Board;
 use App\Models\V1\Project;
-use Illuminate\Http\Request;
 
 class BoardController extends Controller
 {
@@ -44,5 +43,12 @@ class BoardController extends Controller
         }
 
         return ApiResponse::ok(data: BoardResource::make($board));
+    }
+
+    public function destroy(Board $board)
+    {
+        $this->authorize('delete', $board);
+        $board->delete();
+        return ApiResponse::noContent();
     }
 }
