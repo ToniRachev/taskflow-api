@@ -30,8 +30,6 @@ class ColumnPolicy
      */
     public function create(User $user, Board $board): bool
     {
-
-        dd($board->project->organization->isMember($user));
         return $board->project->organization->hasAdminAccess($user);
     }
 

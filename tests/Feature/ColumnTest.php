@@ -2,14 +2,21 @@
 
 // Store
 
+use App\Enums\V1\MembershipRoleEnum;
 use App\Models\V1\Organization;
+use App\Models\V1\Project;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = \App\Models\V1\User::factory()->create();
     $this->organization = Organization::factory()->create();
-    $this->board = \App\Models\V1\Board::factory()->create();
+    $this->organization->members()->attach($this->user->id, [
+        'role' => MembershipRoleEnum::ADMIN->value,
+        'joined_at' => now(),
+    ]);
+    $this->project = Project::factory()->create(['organization_id' => $this->organization->id]);
+    $this->board = \App\Models\V1\Board::factory()->create(['project_id' => $this->project->id]);
     $this->column = \App\Models\V1\Column::factory()->create();
     $this->payload = [
         'name' => fake()->sentence(),
